@@ -1,16 +1,18 @@
 import Link from "next/link";
-import StatusBadge from "@/components/StatusBadge";
-import { getConnection, listConversations, isSupabaseConfigured } from "@/lib/repo";
+import ChannelStats from "@/components/ChannelStats";
+import { getConnection, getPlatformStats, isSupabaseConfigured } from "@/lib/repo";
 import { isOpenAIConfigured } from "@/lib/ai";
 import { isEncryptionConfigured } from "@/lib/crypto";
+import type { Platform, ConnectionStatus } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
 export default async function Dashboard() {
-  const [wa, ig, conversas] = await Promise.all([
+  const [wa, ig, waStats, igStats] = await Promise.all([
     getConnection("whatsapp"),
     getConnection("instagram"),
-    listConversations(),
+    getPlatformStats("whatsapp"),
+    getPlatformStats("instagram"),
   ]);
 
   const checks = [
@@ -23,34 +25,24 @@ export default async function Dashboard() {
     <div>
       <h1 style={{ fontSize: 26, fontWeight: 800, marginBottom: 4 }}>Dashboard</h1>
       <p style={{ color: "var(--muted)", marginBottom: 24 }}>
-        Visão geral das conexões e do atendimento.
+        Visão geral de cada canal separadamente.
       </p>
 
       <div className="grid-2" style={{ marginBottom: 24 }}>
-        <div className="card">
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <strong>🟢 WhatsApp</strong>
-            <StatusBadge status={wa.status} />
-          </div>
-          <Link href="/whatsapp" className="btn secondary" style={{ marginTop: 14, display: "inline-block" }}>
-            Configurar
-          </Link>
-        </div>
-        <div className="card">
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <strong>📸 Instagram</strong>
-            <StatusBadge status={ig.status} />
-          </div>
-          <Link href="/instagram" className="btn secondary" style={{ marginTop: 14, display: "inline-block" }}>
-            Configurar
-          </Link>
-        </div>
-      </div>
-
-      <div className="grid-3" style={{ marginBottom: 24 }}>
-        <Metric label="Conversas" value={conversas.length} />
-        <Metric label="IA" value="⚙️" hint="Veja em Configuração da IA" />
-        <Metric label="Plataformas conectadas" value={[wa, ig].filter((c) => c.status === "conectado").length} />
+        <ChannelCard
+          platform="whatsapp"
+          titulo="🟢 WhatsApp"
+          status={wa.status}
+          total={waStats.total}
+          aguardando={waStats.aguardando}
+        />
+        <ChannelCard
+          platform="instagram"
+          titulo="📸 Instagram"
+          status={ig.status}
+          total={igStats.total}
+          aguardando={igStats.aguardando}
+        />
       </div>
 
       <div className="card">
@@ -75,12 +67,37 @@ export default async function Dashboard() {
   );
 }
 
-function Metric({ label, value, hint }: { label: string; value: React.ReactNode; hint?: string }) {
+function ChannelCard({
+  platform,
+  titulo,
+  status,
+  total,
+  aguardando,
+}: {
+  platform: Platform;
+  titulo: string;
+  status: ConnectionStatus;
+  total: number;
+  aguardando: number;
+}) {
   return (
     <div className="card">
-      <div style={{ color: "var(--muted)", fontSize: 13 }}>{label}</div>
-      <div style={{ fontSize: 30, fontWeight: 800, marginTop: 6 }}>{value}</div>
-      {hint && <div style={{ color: "var(--muted)", fontSize: 12, marginTop: 4 }}>{hint}</div>}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+        <strong style={{ fontSize: 16 }}>{titulo}</strong>
+      </div>
+      <ChannelStats status={status} total={total} aguardando={aguardando} />
+      <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
+        <Link href={`/${platform}`} className="btn secondary" style={{ fontSize: 13 }}>
+          Abrir canal
+        </Link>
+        <Link
+          href={`/conversas?platform=${platform}`}
+          className="btn secondary"
+          style={{ fontSize: 13 }}
+        >
+          Ver conversas
+        </Link>
+      </div>
     </div>
   );
 }
