@@ -45,6 +45,14 @@ create table if not exists messages (
 
 create index if not exists idx_messages_conv on messages(conversation_id, created_at);
 
+-- Segurança: RLS ligado. O app acessa estas tabelas apenas pelo servidor
+-- (service_role, que ignora RLS). Sem policies, os papéis anon/authenticated
+-- ficam sem acesso via API pública.
+alter table channel_connections enable row level security;
+alter table ai_config enable row level security;
+alter table conversations enable row level security;
+alter table messages enable row level security;
+
 -- uma config de IA por canal
 insert into ai_config (platform)
 select 'whatsapp' where not exists (select 1 from ai_config where platform = 'whatsapp');
