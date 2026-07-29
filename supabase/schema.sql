@@ -13,6 +13,7 @@ create table if not exists channel_connections (
 
 create table if not exists ai_config (
   id uuid primary key default gen_random_uuid(),
+  platform text not null unique check (platform in ('whatsapp','instagram')),
   persona text not null default 'Você é um atendente virtual simpático e prestativo.',
   tom text not null default 'profissional e cordial',
   modelo text not null default 'gpt-4o-mini',
@@ -44,7 +45,8 @@ create table if not exists messages (
 
 create index if not exists idx_messages_conv on messages(conversation_id, created_at);
 
--- linha única de config da IA
-insert into ai_config (persona)
-select 'Você é um atendente virtual simpático e prestativo.'
-where not exists (select 1 from ai_config);
+-- uma config de IA por canal
+insert into ai_config (platform)
+select 'whatsapp' where not exists (select 1 from ai_config where platform = 'whatsapp');
+insert into ai_config (platform)
+select 'instagram' where not exists (select 1 from ai_config where platform = 'instagram');

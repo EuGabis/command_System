@@ -26,6 +26,7 @@ export interface ConnectionView {
 
 export interface AiConfig {
   id?: string;
+  platform?: Platform;
   persona: string;
   tom: string;
   modelo: string;

@@ -5,7 +5,13 @@ import type { AiConfig } from "@/lib/types";
 
 const MODELOS = ["gpt-4o-mini", "gpt-4o", "gpt-4.1-mini", "gpt-4.1"];
 
-export default function AiConfigForm({ initial }: { initial: AiConfig }) {
+export default function AiConfigForm({
+  initial,
+  platform,
+}: {
+  initial: AiConfig;
+  platform: "whatsapp" | "instagram";
+}) {
   const [cfg, setCfg] = useState<AiConfig>(initial);
   const [msg, setMsg] = useState<{ type: "ok" | "err"; text: string } | null>(null);
   const [saving, setSaving] = useState(false);
@@ -21,7 +27,7 @@ export default function AiConfigForm({ initial }: { initial: AiConfig }) {
       const res = await fetch("/api/ai-config", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(cfg),
+        body: JSON.stringify({ ...cfg, platform }),
       });
       if (!res.ok) throw new Error((await res.json()).error ?? "Erro ao salvar");
       setMsg({ type: "ok", text: "Configuração da IA salva." });
