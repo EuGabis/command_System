@@ -24,7 +24,7 @@ export async function processarMensagemRecebida(
   const conversationId = await upsertConversation(platform, contato, nome);
   await addMessage(conversationId, "entrada", texto, "cliente");
 
-  const cfg = await getAiConfig();
+  const cfg = await getAiConfig(platform);
   if (!cfg.ativo) {
     return; // handoff humano — não responde automaticamente
   }

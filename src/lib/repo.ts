@@ -72,9 +72,10 @@ export async function saveConnection(
     last_error: null,
     updated_at: new Date().toISOString(),
   };
-  await supabaseAdmin()
+  const { error } = await supabaseAdmin()
     .from("channel_connections")
     .upsert(row, { onConflict: "platform" });
+  if (error) throw new Error(error.message);
 }
 
 export async function setConnectionStatus(
@@ -98,21 +99,30 @@ export async function getCredentials<T = Record<string, string>>(
 
 /* ---------- Config IA ---------- */
 
-export async function getAiConfig(): Promise<AiConfig> {
-  if (!isSupabaseConfigured()) return DEFAULT_AI;
-  const { data } = await supabaseAdmin().from("ai_config").select("*").limit(1).maybeSingle();
-  return data ? (data as AiConfig) : DEFAULT_AI;
+// Config da IA de um canal específico. Cada plataforma tem sua própria config.
+export async function getAiConfig(platform: Platform): Promise<AiConfig> {
+  if (!isSupabaseConfigured()) return { ...DEFAULT_AI, platform };
+  const { data } = await supabaseAdmin()
+    .from("ai_config")
+    .select("*")
+    .eq("platform", platform)
+    .maybeSingle();
+  return data ? (data as AiConfig) : { ...DEFAULT_AI, platform };
 }
 
-export async function saveAiConfig(cfg: AiConfig): Promise<void> {
-  const client = supabaseAdmin();
-  const { data } = await client.from("ai_config").select("id").limit(1).maybeSingle();
-  const payload = { ...cfg, updated_at: new Date().toISOString() };
-  if (data?.id) {
-    await client.from("ai_config").update(payload).eq("id", data.id);
-  } else {
-    await client.from("ai_config").insert(payload);
-  }
+export async function saveAiConfig(platform: Platform, cfg: AiConfig): Promise<void> {
+  const payload = {
+    platform,
+    persona: cfg.persona,
+    tom: cfg.tom,
+    modelo: cfg.modelo,
+    base_conhecimento: cfg.base_conhecimento,
+    regras_escalonamento: cfg.regras_escalonamento,
+    ativo: cfg.ativo,
+    updated_at: new Date().toISOString(),
+  };
+  const { error } = await supabaseAdmin().from("ai_config").upsert(payload, { onConflict: "platform" });
+  if (error) throw new Error(error.message);
 }
 
 /* ---------- Conversas / Mensagens ---------- */
@@ -143,7 +153,7 @@ export async function upsertConversation(
   nome?: string,
 ): Promise<string> {
   const client = supabaseAdmin();
-  const { data } = await client
+  const { data, error } = await client
     .from("conversations")
     .upsert(
       { platform, contato, nome_contato: nome ?? null, updated_at: new Date().toISOString() },
@@ -151,6 +161,7 @@ export async function upsertConversation(
     )
     .select("id")
     .single();
+  if (error) throw new Error(error.message);
   return data!.id as string;
 }
 
@@ -160,12 +171,13 @@ export async function addMessage(
   conteudo: string,
   autor: string,
 ): Promise<void> {
-  await supabaseAdmin().from("messages").insert({
+  const { error } = await supabaseAdmin().from("messages").insert({
     conversation_id: conversationId,
     direcao,
     conteudo,
     autor,
   });
+  if (error) throw new Error(error.message);
   await supabaseAdmin()
     .from("conversations")
     .update({ updated_at: new Date().toISOString() })
