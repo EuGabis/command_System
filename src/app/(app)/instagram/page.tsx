@@ -1,5 +1,6 @@
 import ConnectionForm from "@/components/ConnectionForm";
 import StatusBadge from "@/components/StatusBadge";
+import ChannelOverview from "@/components/ChannelOverview";
 import { getConnection } from "@/lib/repo";
 
 export const dynamic = "force-dynamic";
@@ -22,6 +23,10 @@ export default async function InstagramPage() {
           Último erro: {conn.lastError}
         </div>
       )}
+
+      <ChannelOverview platform="instagram" status={conn.status} />
+
+      <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 14 }}>Configuração da conexão</h2>
       <ConnectionForm
         platform="instagram"
         webhookPath="/api/webhook/instagram"

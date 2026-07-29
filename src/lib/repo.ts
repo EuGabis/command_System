@@ -172,6 +172,41 @@ export async function addMessage(
     .eq("id", conversationId);
 }
 
+export interface PlatformStats {
+  total: number;
+  aguardando: number;
+}
+
+// Estatísticas de um canal: total de conversas e quantas aguardam atenção
+// (abertas ou em atendimento humano).
+export async function getPlatformStats(platform: Platform): Promise<PlatformStats> {
+  if (!isSupabaseConfigured()) return { total: 0, aguardando: 0 };
+  const client = supabaseAdmin();
+  const [{ count: total }, { count: aguardando }] = await Promise.all([
+    client.from("conversations").select("*", { count: "exact", head: true }).eq("platform", platform),
+    client
+      .from("conversations")
+      .select("*", { count: "exact", head: true })
+      .eq("platform", platform)
+      .in("status", ["aberta", "humano"]),
+  ]);
+  return { total: total ?? 0, aguardando: aguardando ?? 0 };
+}
+
+export async function listConversationsByPlatform(
+  platform: Platform,
+  limit = 20,
+): Promise<Conversation[]> {
+  if (!isSupabaseConfigured()) return [];
+  const { data } = await supabaseAdmin()
+    .from("conversations")
+    .select("*")
+    .eq("platform", platform)
+    .order("updated_at", { ascending: false })
+    .limit(limit);
+  return (data as Conversation[]) ?? [];
+}
+
 export async function getOwnerBusiness(): Promise<{ empresa: string; marca: string } | null> {
   if (!isSupabaseConfigured()) return null;
   const { data } = await supabaseAdmin()

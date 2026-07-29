@@ -1,21 +1,56 @@
-import { listConversations, getMessages } from "@/lib/repo";
+import Link from "next/link";
+import { listConversations, listConversationsByPlatform, getMessages } from "@/lib/repo";
+import type { Platform } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
+
+const filtros: { key: "todos" | Platform; label: string }[] = [
+  { key: "todos", label: "Todos" },
+  { key: "whatsapp", label: "🟢 WhatsApp" },
+  { key: "instagram", label: "📸 Instagram" },
+];
 
 export default async function ConversasPage({
   searchParams,
 }: {
-  searchParams: Promise<{ id?: string }>;
+  searchParams: Promise<{ id?: string; platform?: string }>;
 }) {
-  const { id } = await searchParams;
-  const conversas = await listConversations();
+  const { id, platform } = await searchParams;
+  const canal: Platform | null = platform === "whatsapp" || platform === "instagram" ? platform : null;
+
+  const conversas = canal ? await listConversationsByPlatform(canal, 100) : await listConversations();
   const selecionada = id ?? conversas[0]?.id;
   const mensagens = selecionada ? await getMessages(selecionada) : [];
+
+  const suffix = (base: string) => (canal ? `${base}${base.includes("?") ? "&" : "?"}platform=${canal}` : base);
 
   return (
     <div>
       <h1 style={{ fontSize: 26, fontWeight: 800, marginBottom: 4 }}>Conversas</h1>
-      <p style={{ color: "var(--muted)", marginBottom: 24 }}>Inbox unificado do WhatsApp e Instagram.</p>
+      <p style={{ color: "var(--muted)", marginBottom: 16 }}>Inbox do WhatsApp e Instagram.</p>
+
+      <div style={{ display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap" }}>
+        {filtros.map((f) => {
+          const ativo = (f.key === "todos" && !canal) || f.key === canal;
+          return (
+            <Link
+              key={f.key}
+              href={f.key === "todos" ? "/conversas" : `/conversas?platform=${f.key}`}
+              className="badge"
+              style={{
+                textDecoration: "none",
+                color: ativo ? "#fff" : "var(--text)",
+                background: ativo ? "var(--brand)" : "var(--panel-2)",
+                borderColor: ativo ? "var(--brand)" : "var(--border)",
+                padding: "6px 14px",
+                fontSize: 13,
+              }}
+            >
+              {f.label}
+            </Link>
+          );
+        })}
+      </div>
 
       {conversas.length === 0 ? (
         <div className="card" style={{ color: "var(--muted)" }}>
@@ -27,7 +62,7 @@ export default async function ConversasPage({
             {conversas.map((c) => (
               <a
                 key={c.id}
-                href={`/conversas?id=${c.id}`}
+                href={suffix(`/conversas?id=${c.id}`)}
                 style={{
                   display: "block",
                   padding: "10px 12px",
