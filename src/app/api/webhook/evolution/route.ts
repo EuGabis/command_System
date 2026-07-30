@@ -24,6 +24,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true });
     }
 
+    const instance = body?.instance as string | undefined;
+
     // data pode vir como objeto único ou array
     const raw = body?.data;
     const items: EvolutionMessage[] = Array.isArray(raw) ? raw : raw ? [raw] : [];
@@ -40,7 +42,9 @@ export async function POST(req: NextRequest) {
       const contato = remoteJid.split("@")[0];
       if (!contato) continue;
 
-      await processarMensagemRecebida("whatsapp", contato, texto, msg.pushName);
+      await processarMensagemRecebida("whatsapp", contato, texto, msg.pushName, {
+        evolutionInstance: instance,
+      });
     }
   } catch (e) {
     console.error("Webhook Evolution erro:", e);
