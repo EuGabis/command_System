@@ -122,6 +122,58 @@ html, body {
   .tab.active { color: var(--brand); }
 }
 
+/* ===== Botão flutuante de Ajuda (?) ===== */
+.help-fab {
+  position: fixed; right: 20px; bottom: 20px; z-index: 60;
+  width: 50px; height: 50px; border-radius: 50%;
+  background: var(--brand); color: #fff;
+  display: grid; place-items: center;
+  font-size: 24px; font-weight: 800; line-height: 1;
+  text-decoration: none; border: none; cursor: pointer;
+  box-shadow: 0 6px 22px rgba(0,0,0,.45);
+  transition: transform .12s ease, filter .12s ease;
+}
+.help-fab:hover { filter: brightness(1.1); transform: translateY(-2px); }
+.help-fab.active { background: var(--panel-2); border: 1px solid var(--border); }
+@media (max-width: 860px) {
+  .help-fab { right: 16px; bottom: calc(84px + env(safe-area-inset-bottom)); width: 46px; height: 46px; font-size: 22px; }
+}
+
+/* ===== Página de Ajuda (manual) ===== */
+.help-details {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 12px; margin-bottom: 12px; overflow: hidden;
+}
+.help-details > summary {
+  list-style: none; cursor: pointer; padding: 16px 18px;
+  display: flex; align-items: center; gap: 12px;
+  font-weight: 700; font-size: 15px; user-select: none;
+}
+.help-details > summary::-webkit-details-marker { display: none; }
+.help-details > summary::after {
+  content: "›"; margin-left: auto; font-size: 20px; color: var(--muted);
+  transition: transform .15s ease;
+}
+.help-details[open] > summary::after { transform: rotate(90deg); }
+.help-details > summary:hover { background: var(--panel-2); }
+.help-body { padding: 4px 18px 18px; color: var(--text); font-size: 14px; line-height: 1.6; }
+.help-body p { margin: 0 0 10px; }
+.help-body ul, .help-body ol { margin: 0 0 10px; padding-left: 20px; }
+.help-body li { margin: 4px 0; }
+.help-body strong { color: var(--text); font-weight: 700; }
+.help-body code {
+  background: var(--panel-2); border: 1px solid var(--border);
+  border-radius: 5px; padding: 1px 6px; font-size: 12.5px;
+}
+.help-body .tip {
+  background: var(--panel-2); border-left: 3px solid var(--brand);
+  border-radius: 6px; padding: 10px 12px; margin: 10px 0; font-size: 13.5px;
+}
+.help-ico {
+  flex: none; width: 34px; height: 34px; border-radius: 9px;
+  background: var(--panel-2); display: grid; place-items: center; font-size: 18px;
+}
+
 /* Grades responsivas */
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
