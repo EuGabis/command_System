@@ -2,10 +2,20 @@ export type Platform = "whatsapp" | "instagram";
 
 export type ConnectionStatus = "desconectado" | "pendente" | "conectado" | "erro";
 
+// Provedor usado para o canal WhatsApp. "meta" = Cloud API oficial;
+// "evolution" = Evolution API (WhatsApp Web / QR code).
+export type WhatsAppProvider = "meta" | "evolution";
+
 export interface WhatsAppCredentials {
+  provider?: WhatsAppProvider; // ausente = "meta" (compatibilidade)
   phoneNumberId: string;
   wabaId: string;
   accessToken: string;
+}
+
+export interface EvolutionCredentials {
+  provider: "evolution";
+  instanceName: string;
 }
 
 export interface InstagramCredentials {
@@ -21,7 +31,7 @@ export interface ConnectionView {
   verifyToken: string | null;
   lastError: string | null;
   hasCredentials: boolean;
-  credentials?: Partial<WhatsAppCredentials & InstagramCredentials>;
+  credentials?: Partial<WhatsAppCredentials & InstagramCredentials & EvolutionCredentials>;
 }
 
 export interface AiConfig {

@@ -8,7 +8,13 @@ import {
 } from "./repo";
 import { gerarResposta } from "./ai";
 import { whatsappSendText, instagramSendText } from "./meta";
-import type { Platform, WhatsAppCredentials, InstagramCredentials } from "./types";
+import { evolutionSendText } from "./evolution";
+import type {
+  Platform,
+  WhatsAppCredentials,
+  InstagramCredentials,
+  EvolutionCredentials,
+} from "./types";
 
 /**
  * Processa uma mensagem recebida de qualquer plataforma:
@@ -35,8 +41,12 @@ export async function processarMensagemRecebida(
 
   try {
     if (platform === "whatsapp") {
-      const creds = await getCredentials<WhatsAppCredentials>("whatsapp");
-      if (creds) await whatsappSendText(creds, contato, resposta);
+      const creds = await getCredentials<WhatsAppCredentials & Partial<EvolutionCredentials>>("whatsapp");
+      if (creds?.provider === "evolution") {
+        await evolutionSendText(creds.instanceName as string, contato, resposta);
+      } else if (creds) {
+        await whatsappSendText(creds, contato, resposta);
+      }
     } else {
       const creds = await getCredentials<InstagramCredentials>("instagram");
       if (creds) await instagramSendText(creds, contato, resposta);
