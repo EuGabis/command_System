@@ -125,11 +125,14 @@ html, body {
 }
 
 /* ===== Inbox CRM (tela cheia, 3 colunas) ===== */
+/* Nesta tela o conteúdo ocupa toda a área (sem o max-width/padding do .content) */
+main.content:has(.inbox) { max-width: none; padding: 0; }
+
 .inbox {
-  margin: -32px -40px;                 /* cancela o padding do .content (desktop) */
+  margin: 0;
   height: 100vh;
   display: grid;
-  grid-template-columns: 320px minmax(0, 1fr) 300px;
+  grid-template-columns: 340px minmax(0, 1fr) 320px;
   background: var(--bg);
   overflow: hidden;
 }
@@ -209,7 +212,7 @@ html, body {
 
 @media (max-width: 860px) {
   .inbox {
-    margin: -18px -16px calc(-78px - env(safe-area-inset-bottom));
+    margin: 0;
     height: calc(100dvh - 56px);
     grid-template-columns: 1fr;
   }
