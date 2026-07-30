@@ -5,10 +5,15 @@ import {
   getAiConfig,
   getCredentials,
   getOwnerBusiness,
+  getConversationById,
 } from "./repo";
 import { gerarResposta } from "./ai";
 import { whatsappSendText, instagramSendText } from "./meta";
-import { evolutionSendText } from "./evolution";
+import {
+  evolutionSendText,
+  isEvolutionConfigured as evolutionConfigured,
+  defaultInstance,
+} from "./evolution";
 import type {
   Platform,
   WhatsAppCredentials,
@@ -21,6 +26,33 @@ import type {
  * persiste entrada -> gera resposta da IA -> envia -> persiste saída.
  * Se a IA estiver inativa, apenas registra e deixa para atendimento humano.
  */
+// Envia uma mensagem manual (operador humano) para o contato e persiste a saída.
+export async function enviarMensagemManual(
+  conversationId: string,
+  platform: Platform,
+  contato: string,
+  texto: string,
+): Promise<void> {
+  if (platform === "whatsapp") {
+    const creds = await getCredentials<WhatsAppCredentials & Partial<EvolutionCredentials>>("whatsapp");
+    if (creds?.provider === "evolution") {
+      await evolutionSendText(creds.instanceName as string, contato, texto);
+    } else if (creds) {
+      await whatsappSendText(creds, contato, texto);
+    } else if (evolutionConfigured()) {
+      // sem conexão salva, mas Evolution disponível — usa a instância padrão
+      await evolutionSendText(defaultInstance(), contato, texto);
+    } else {
+      throw new Error("Sem canal de envio configurado para WhatsApp.");
+    }
+  } else {
+    const creds = await getCredentials<InstagramCredentials>("instagram");
+    if (!creds) throw new Error("Sem credenciais do Instagram.");
+    await instagramSendText(creds, contato, texto);
+  }
+  await addMessage(conversationId, "saida", texto, "humano");
+}
+
 export interface OrigemMensagem {
   // Quando a mensagem chega pelo webhook da Evolution, sabemos que a resposta
   // deve voltar por essa mesma instância — independente da conexão salva.
@@ -38,7 +70,9 @@ export async function processarMensagemRecebida(
   await addMessage(conversationId, "entrada", texto, "cliente");
 
   const cfg = await getAiConfig(platform);
-  if (!cfg.ativo) {
+  const conv = await getConversationById(conversationId);
+  // IA responde só se ligada globalmente (config do canal) E nesta conversa.
+  if (!cfg.ativo || conv?.ia_ativa === false) {
     return; // handoff humano — não responde automaticamente
   }
 

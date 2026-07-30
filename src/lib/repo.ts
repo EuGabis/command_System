@@ -134,7 +134,37 @@ export async function listConversations(): Promise<Conversation[]> {
     .select("*")
     .order("updated_at", { ascending: false })
     .limit(100);
-  return (data as Conversation[]) ?? [];
+  return normalizeConversas(data);
+}
+
+function normalizeConversas(data: unknown): Conversation[] {
+  return ((data as Conversation[]) ?? []).map((c) => ({
+    ...c,
+    ia_ativa: (c as { ia_ativa?: boolean }).ia_ativa ?? true,
+  }));
+}
+
+export async function getConversationById(id: string): Promise<Conversation | null> {
+  if (!isSupabaseConfigured()) return null;
+  const { data } = await supabaseAdmin().from("conversations").select("*").eq("id", id).maybeSingle();
+  if (!data) return null;
+  return { ...(data as Conversation), ia_ativa: (data as { ia_ativa?: boolean }).ia_ativa ?? true };
+}
+
+export async function setConversationStatus(id: string, status: string): Promise<void> {
+  const { error } = await supabaseAdmin()
+    .from("conversations")
+    .update({ status, updated_at: new Date().toISOString() })
+    .eq("id", id);
+  if (error) throw new Error(error.message);
+}
+
+export async function setConversationIa(id: string, ativa: boolean): Promise<void> {
+  const { error } = await supabaseAdmin()
+    .from("conversations")
+    .update({ ia_ativa: ativa, updated_at: new Date().toISOString() })
+    .eq("id", id);
+  if (error) throw new Error(error.message);
 }
 
 export async function getMessages(conversationId: string): Promise<Message[]> {
@@ -216,7 +246,7 @@ export async function listConversationsByPlatform(
     .eq("platform", platform)
     .order("updated_at", { ascending: false })
     .limit(limit);
-  return (data as Conversation[]) ?? [];
+  return normalizeConversas(data);
 }
 
 export async function getOwnerBusiness(): Promise<{ empresa: string; marca: string } | null> {
