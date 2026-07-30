@@ -7,6 +7,7 @@ import {
   getOwnerBusiness,
   getConversationById,
   saveLead,
+  ultimaEntradaId,
 } from "./repo";
 import { gerarResposta, extrairLead } from "./ai";
 import { whatsappSendText, instagramSendText } from "./meta";
@@ -54,6 +55,13 @@ export async function enviarMensagemManual(
   await addMessage(conversationId, "saida", texto, "humano");
 }
 
+// Janela de agrupamento de mensagens em rajada (ms). Ajustável por env.
+const DEBOUNCE_MS = Number(process.env.AI_DEBOUNCE_MS ?? 8000);
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
 export interface OrigemMensagem {
   // Quando a mensagem chega pelo webhook da Evolution, sabemos que a resposta
   // deve voltar por essa mesma instância — independente da conexão salva.
@@ -78,8 +86,20 @@ export async function processarMensagemRecebida(
     return; // handoff humano — não responde automaticamente
   }
 
-  const historico = await conversationHistory(conversationId);
+  // Debounce de rajadas: se o cliente manda várias mensagens seguidas, cada uma
+  // dispara um webhook. Esperamos um instante e, se chegou mensagem mais nova,
+  // esta invocação desiste — só a última responde, considerando o histórico todo.
+  const marcador = await ultimaEntradaId(conversationId);
+  await sleep(DEBOUNCE_MS);
+  const maisRecente = await ultimaEntradaId(conversationId);
+  if (marcador && maisRecente && maisRecente !== marcador) {
+    return; // chegou mensagem nova — a invocação dela vai responder
+  }
+
   const negocio = await getOwnerBusiness();
+  // O histórico já inclui a mensagem atual; remove a última pra não duplicar.
+  const hist = await conversationHistory(conversationId, 30);
+  const historico = hist.slice(0, -1);
   const resposta = await gerarResposta(cfg, historico, texto, negocio);
 
   let enviado = false;
