@@ -207,6 +207,19 @@ export async function setConversationIa(id: string, ativa: boolean): Promise<voi
   if (error) throw new Error(error.message);
 }
 
+// ID da última mensagem recebida (entrada) — usado no debounce de rajadas.
+export async function ultimaEntradaId(conversationId: string): Promise<string | null> {
+  const { data } = await supabaseAdmin()
+    .from("messages")
+    .select("id")
+    .eq("conversation_id", conversationId)
+    .eq("direcao", "entrada")
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  return (data?.id as string) ?? null;
+}
+
 export async function getMessages(conversationId: string): Promise<Message[]> {
   if (!isSupabaseConfigured()) return [];
   const { data } = await supabaseAdmin()
