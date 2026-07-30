@@ -45,6 +45,34 @@ export interface AiConfig {
   ativo: boolean;
 }
 
+export type PipelineStage =
+  | "novo_lead"
+  | "em_atendimento"
+  | "cotacao_enviada"
+  | "negociacao"
+  | "fechado"
+  | "perdido";
+
+export const PIPELINE_STAGES: { key: PipelineStage; label: string }[] = [
+  { key: "novo_lead", label: "Novo Lead" },
+  { key: "em_atendimento", label: "Em Atendimento" },
+  { key: "cotacao_enviada", label: "Cotação Enviada" },
+  { key: "negociacao", label: "Negociação" },
+  { key: "fechado", label: "Fechado" },
+  { key: "perdido", label: "Perdido" },
+];
+
+// Dados do lead extraídos pela IA. Todos opcionais — a IA preenche o que conseguir.
+export interface LeadData {
+  origem?: string;
+  destino?: string;
+  data_ida?: string;
+  data_volta?: string;
+  passageiros?: string;
+  tipo_servico?: string;
+  valor?: string;
+}
+
 export interface Conversation {
   id: string;
   platform: Platform;
@@ -52,6 +80,10 @@ export interface Conversation {
   nome_contato: string | null;
   status: string;
   ia_ativa: boolean;
+  pipeline_stage: PipelineStage;
+  lead_data: LeadData;
+  lead_resumo: string | null;
+  stage_locked: boolean;
   updated_at: string;
 }
 

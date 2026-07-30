@@ -10,6 +10,7 @@ const nav = [
   { href: "/instagram", label: "Instagram", icon: "📸" },
   { href: "/ia", label: "IA", icon: "🤖" },
   { href: "/conversas", label: "Conversas", icon: "💬" },
+  { href: "/pipeline", label: "Pipeline", icon: "📋" },
 ];
 
 // Item extra só no menu lateral (no mobile fica acessível pelo avatar da top bar)

@@ -30,6 +30,13 @@ create table if not exists conversations (
   nome_contato text,
   status text not null default 'aberta' check (status in ('aberta','ia','humano','fechada')),
   ia_ativa boolean not null default true, -- resposta automática da IA nesta conversa
+  -- pipeline / CRM
+  pipeline_stage text not null default 'novo_lead'
+    check (pipeline_stage in ('novo_lead','em_atendimento','cotacao_enviada','negociacao','fechado','perdido')),
+  lead_data jsonb not null default '{}'::jsonb,   -- dados extraídos pela IA
+  lead_resumo text,                                -- resumo curto da IA
+  stage_locked boolean not null default false,     -- true quando o humano move o card
+  lead_updated_at timestamptz,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   unique (platform, contato)

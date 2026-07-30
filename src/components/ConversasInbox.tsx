@@ -130,6 +130,16 @@ export default function ConversasInbox({ initial }: { initial: Conversation[] })
     }
   }, []);
 
+  // abre a conversa indicada por ?id= (ex: ao clicar num card do pipeline)
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get("id");
+    if (id) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- lê da URL só no mount
+      setSelectedId(id);
+      setMobileView("chat");
+    }
+  }, []);
+
   useEffect(() => {
     const t = setInterval(carregarLista, 4000);
     return () => clearInterval(t);

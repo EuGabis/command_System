@@ -6,8 +6,9 @@ import {
   getCredentials,
   getOwnerBusiness,
   getConversationById,
+  saveLead,
 } from "./repo";
-import { gerarResposta } from "./ai";
+import { gerarResposta, extrairLead } from "./ai";
 import { whatsappSendText, instagramSendText } from "./meta";
 import {
   evolutionSendText,
@@ -73,6 +74,7 @@ export async function processarMensagemRecebida(
   const conv = await getConversationById(conversationId);
   // IA responde só se ligada globalmente (config do canal) E nesta conversa.
   if (!cfg.ativo || conv?.ia_ativa === false) {
+    await atualizarPipeline(conversationId, conv?.stage_locked ?? false);
     return; // handoff humano — não responde automaticamente
   }
 
@@ -113,4 +115,19 @@ export async function processarMensagemRecebida(
   }
 
   await addMessage(conversationId, "saida", resposta, "ia");
+
+  await atualizarPipeline(conversationId, conv?.stage_locked ?? false);
+}
+
+// Extrai dados do lead e atualiza o pipeline. Nunca lança — é best-effort.
+async function atualizarPipeline(conversationId: string, stageLocked: boolean): Promise<void> {
+  try {
+    const historico = await conversationHistory(conversationId, 30);
+    const extra = await extrairLead(historico);
+    if (extra) {
+      await saveLead(conversationId, extra.lead_data, extra.resumo, extra.estagio, stageLocked);
+    }
+  } catch (e) {
+    console.error("Falha ao atualizar pipeline:", e);
+  }
 }
