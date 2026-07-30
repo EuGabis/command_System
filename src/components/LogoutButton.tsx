@@ -11,12 +11,9 @@ export default function LogoutButton() {
     router.refresh();
   }
   return (
-    <button
-      onClick={sair}
-      className="btn secondary"
-      style={{ width: "100%", fontSize: 13, padding: "8px 12px" }}
-    >
-      Sair
+    <button onClick={sair} className="logout-btn" title="Sair">
+      <span className="nav-ico">⎋</span>
+      <span className="nav-text">Sair</span>
     </button>
   );
 }
