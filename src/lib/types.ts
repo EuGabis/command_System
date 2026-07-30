@@ -51,6 +51,7 @@ export interface Conversation {
   contato: string;
   nome_contato: string | null;
   status: string;
+  ia_ativa: boolean;
   updated_at: string;
 }
 

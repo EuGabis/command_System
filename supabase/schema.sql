@@ -29,6 +29,7 @@ create table if not exists conversations (
   contato text not null,
   nome_contato text,
   status text not null default 'aberta' check (status in ('aberta','ia','humano','fechada')),
+  ia_ativa boolean not null default true, -- resposta automática da IA nesta conversa
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   unique (platform, contato)
