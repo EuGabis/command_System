@@ -197,6 +197,9 @@ main.content:has(.inbox) { max-width: none; padding: 0; }
 .bubble.in .meta { text-align: left; }
 
 /* ===== Pipeline (Kanban) ===== */
+/* usa toda a largura da tela (sem o max-width do .content), mantendo o padding do cabeçalho */
+main.content:has(.kanban) { max-width: none; }
+
 .kanban { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 8px; align-items: flex-start; }
 .kanban-col {
   flex: 0 0 288px; background: var(--panel); border: 1px solid var(--border);
