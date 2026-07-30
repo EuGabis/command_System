@@ -82,12 +82,20 @@ function ChannelCard({
 }) {
   return (
     <div className="card">
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
-        <strong style={{ fontSize: 16 }}>{titulo}</strong>
+      <div style={{ display: "flex", alignItems: "center", gap: 11, marginBottom: 16 }}>
+        <span
+          style={{
+            width: 40, height: 40, borderRadius: 11, display: "grid", placeItems: "center",
+            fontSize: 20, background: "var(--panel-2)", border: "1px solid var(--border)",
+          }}
+        >
+          {titulo.split(" ")[0]}
+        </span>
+        <strong style={{ fontSize: 17 }}>{titulo.split(" ").slice(1).join(" ")}</strong>
       </div>
       <ChannelStats status={status} total={total} aguardando={aguardando} />
-      <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
-        <Link href={`/${platform}`} className="btn secondary" style={{ fontSize: 13 }}>
+      <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
+        <Link href={`/${platform}`} className="btn" style={{ fontSize: 13 }}>
           Abrir canal
         </Link>
         <Link

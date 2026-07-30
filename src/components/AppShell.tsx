@@ -64,8 +64,13 @@ export default function AppShell({
     <div className="shell">
       {/* ===== Sidebar (desktop) ===== */}
       <aside className="sidebar">
-        <div style={{ fontWeight: 800, fontSize: 17, marginBottom: 4 }}>Central de Comando</div>
-        <div style={{ fontSize: 12, color: "var(--muted)", marginBottom: 24 }}>Atendimento com IA</div>
+        <div className="brand">
+          <span className="brand-mark">C</span>
+          <span className="brand-text">
+            <span className="brand-title">Central de Comando</span>
+            <span className="brand-sub">Atendimento com IA</span>
+          </span>
+        </div>
 
         <nav style={{ display: "flex", flexDirection: "column", gap: 4, flex: 1 }}>
           {allNav.map((n) => (
@@ -73,19 +78,18 @@ export default function AppShell({
               key={n.href}
               href={n.href}
               className={`navlink${isActive(pathname, n.href) ? " active" : ""}`}
+              title={n.label === "IA" ? "Configuração da IA" : n.label}
             >
-              <span>{n.icon}</span>
-              <span>{n.label === "IA" ? "Configuração da IA" : n.label}</span>
+              <span className="nav-ico">{n.icon}</span>
+              <span className="nav-text">{n.label === "IA" ? "Configuração da IA" : n.label}</span>
             </Link>
           ))}
         </nav>
 
-        <div style={{ borderTop: "1px solid var(--border)", paddingTop: 14, marginTop: 14 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-            <Avatar url={avatarUrl} />
-            <div style={{ fontSize: 13, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-              {nome}
-            </div>
+        <div className="side-foot">
+          <div className="side-user">
+            <Avatar url={avatarUrl} size={32} />
+            <span className="nav-text side-name">{nome}</span>
           </div>
           <LogoutButton />
         </div>
