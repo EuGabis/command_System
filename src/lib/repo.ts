@@ -7,6 +7,8 @@ import type {
   AiConfig,
   Conversation,
   Message,
+  PipelineStage,
+  LeadData,
 } from "./types";
 
 export { isSupabaseConfigured };
@@ -137,18 +139,56 @@ export async function listConversations(): Promise<Conversation[]> {
   return normalizeConversas(data);
 }
 
-function normalizeConversas(data: unknown): Conversation[] {
-  return ((data as Conversation[]) ?? []).map((c) => ({
+function normalizeConversa(c: Conversation): Conversation {
+  const r = c as Partial<Conversation>;
+  return {
     ...c,
-    ia_ativa: (c as { ia_ativa?: boolean }).ia_ativa ?? true,
-  }));
+    ia_ativa: r.ia_ativa ?? true,
+    pipeline_stage: r.pipeline_stage ?? "novo_lead",
+    lead_data: r.lead_data ?? {},
+    lead_resumo: r.lead_resumo ?? null,
+    stage_locked: r.stage_locked ?? false,
+  };
+}
+
+function normalizeConversas(data: unknown): Conversation[] {
+  return ((data as Conversation[]) ?? []).map(normalizeConversa);
 }
 
 export async function getConversationById(id: string): Promise<Conversation | null> {
   if (!isSupabaseConfigured()) return null;
   const { data } = await supabaseAdmin().from("conversations").select("*").eq("id", id).maybeSingle();
   if (!data) return null;
-  return { ...(data as Conversation), ia_ativa: (data as { ia_ativa?: boolean }).ia_ativa ?? true };
+  return normalizeConversa(data as Conversation);
+}
+
+// Move o estágio do pipeline. `manual=true` trava a IA de sobrescrever depois.
+export async function setPipelineStage(
+  id: string,
+  stage: PipelineStage,
+  manual: boolean,
+): Promise<void> {
+  const patch: Record<string, unknown> = { pipeline_stage: stage, updated_at: new Date().toISOString() };
+  if (manual) patch.stage_locked = true;
+  const { error } = await supabaseAdmin().from("conversations").update(patch).eq("id", id);
+  if (error) throw new Error(error.message);
+}
+
+// Salva os dados extraídos pela IA. Atualiza o estágio só se o card não estiver travado.
+export async function saveLead(
+  id: string,
+  leadData: LeadData,
+  resumo: string,
+  estagioSugerido: PipelineStage,
+  stageLocked: boolean,
+): Promise<void> {
+  const patch: Record<string, unknown> = {
+    lead_data: leadData,
+    lead_resumo: resumo,
+    lead_updated_at: new Date().toISOString(),
+  };
+  if (!stageLocked) patch.pipeline_stage = estagioSugerido;
+  await supabaseAdmin().from("conversations").update(patch).eq("id", id);
 }
 
 export async function setConversationStatus(id: string, status: string): Promise<void> {
