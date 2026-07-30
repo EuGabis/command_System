@@ -115,6 +115,16 @@ export default function AppShell({
           <span>Perfil</span>
         </Link>
       </nav>
+
+      {/* ===== Botão flutuante de Ajuda ===== */}
+      <Link
+        href="/ajuda"
+        aria-label="Central de Ajuda"
+        title="Ajuda"
+        className={`help-fab${pathname.startsWith("/ajuda") ? " active" : ""}`}
+      >
+        ?
+      </Link>
     </div>
   );
 }
