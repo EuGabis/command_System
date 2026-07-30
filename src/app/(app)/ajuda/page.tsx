@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Icon, { type IconName } from "@/components/Icon";
 
 export const metadata = { title: "Central de Ajuda — Central de Comando" };
 
@@ -8,7 +9,7 @@ function Item({
   children,
   aberto = false,
 }: {
-  icon: string;
+  icon: IconName;
   titulo: string;
   children: React.ReactNode;
   aberto?: boolean;
@@ -16,7 +17,7 @@ function Item({
   return (
     <details className="help-details" open={aberto}>
       <summary>
-        <span className="help-ico">{icon}</span>
+        <span className="help-ico"><Icon name={icon} size={18} /></span>
         {titulo}
       </summary>
       <div className="help-body">{children}</div>
@@ -27,12 +28,13 @@ function Item({
 export default function AjudaPage() {
   return (
     <div style={{ paddingBottom: 40 }}>
-      <h1 style={{ fontSize: 26, fontWeight: 800, marginBottom: 4 }}>Central de Ajuda</h1>
+      <div className="eyebrow" style={{ marginBottom: 8 }}>Manual</div>
+      <h1 style={{ fontSize: 25, fontWeight: 700, marginBottom: 4 }}>Central de Ajuda</h1>
       <p style={{ color: "var(--muted)", marginBottom: 24 }}>
-        Manual completo do sistema. Clique em cada tópico para expandir.
+        Guia completo do sistema. Toque em cada tópico para abrir.
       </p>
 
-      <Item icon="👋" titulo="O que é a Central de Comando" aberto>
+      <Item icon="info" titulo="O que é a Central de Comando" aberto>
         <p>
           A Central de Comando é um painel único para <strong>atender seus clientes no WhatsApp e
           no Instagram com ajuda de uma Inteligência Artificial (IA)</strong>. Ela recebe as
@@ -48,7 +50,7 @@ export default function AjudaPage() {
         </ul>
       </Item>
 
-      <Item icon="🚀" titulo="Primeiros passos (ordem recomendada)">
+      <Item icon="rocket" titulo="Primeiros passos (ordem recomendada)">
         <p>Se está começando agora, siga esta ordem:</p>
         <ol>
           <li><strong>Entre na sua conta</strong> (login).</li>
@@ -58,12 +60,12 @@ export default function AjudaPage() {
           <li>Acompanhe tudo em <strong>Conversas</strong> e no <strong>Pipeline</strong>.</li>
         </ol>
         <div className="tip">
-          💡 Você não precisa fazer tudo de uma vez. Pode conectar só o WhatsApp primeiro e adicionar
+          Você não precisa fazer tudo de uma vez. Pode conectar só o WhatsApp primeiro e adicionar
           o Instagram depois.
         </div>
       </Item>
 
-      <Item icon="🔐" titulo="Login e acesso">
+      <Item icon="lock" titulo="Login e acesso">
         <p>
           O acesso é <strong>fechado</strong>: só quem tem conta entra. No <strong>primeiro
           acesso</strong>, a tela de login mostra a opção de criar a conta do dono. Depois disso, o
@@ -74,12 +76,12 @@ export default function AjudaPage() {
           login.
         </p>
         <div className="tip">
-          🔒 Guarde bem seu e-mail e senha. Se esquecer a senha, ela pode ser redefinida no painel
+          Guarde bem seu e-mail e senha. Se esquecer a senha, ela pode ser redefinida no painel
           administrativo.
         </div>
       </Item>
 
-      <Item icon="📊" titulo="Dashboard (tela inicial)">
+      <Item icon="dashboard" titulo="Dashboard (tela inicial)">
         <p>
           É o resumo do seu atendimento, <strong>separado por canal</strong>. Para cada canal
           (WhatsApp e Instagram) você vê três números:
@@ -95,7 +97,7 @@ export default function AjudaPage() {
         </p>
       </Item>
 
-      <Item icon="🟢" titulo="Conectar o WhatsApp">
+      <Item icon="whatsapp" titulo="Conectar o WhatsApp">
         <p>Existem <strong>duas formas</strong> de conectar o WhatsApp — escolha nas abas da tela:</p>
         <p>
           <strong>1) QR Code (mais simples)</strong> — conecta lendo um QR Code com o seu WhatsApp,
@@ -115,12 +117,12 @@ export default function AjudaPage() {
           certo. A própria tela do canal já mostra o resumo e as conversas do WhatsApp.
         </p>
         <div className="tip">
-          💡 Não sabe onde pegar esses dados? Eles ficam no painel <em>Meta for Developers</em>. Se
+          Não sabe onde pegar esses dados? Eles ficam no painel <em>Meta for Developers</em>. Se
           preferir simplicidade, comece pela conexão por <strong>QR Code</strong>.
         </div>
       </Item>
 
-      <Item icon="📸" titulo="Conectar o Instagram">
+      <Item icon="instagram" titulo="Conectar o Instagram">
         <p>
           O Instagram usa a API oficial da Meta (Graph API). É preciso ter uma conta{" "}
           <strong>Business ou Creator</strong> vinculada a uma Página do Facebook. Os dados pedidos são:
@@ -133,7 +135,7 @@ export default function AjudaPage() {
         <p>Configure o webhook com a URL de callback mostrada na tela e teste a conexão.</p>
       </Item>
 
-      <Item icon="🤖" titulo="Configurar a IA (uma para cada canal)">
+      <Item icon="ai" titulo="Configurar a IA (uma para cada canal)">
         <p>
           Na tela <strong>Configuração da IA</strong> você define como o atendente virtual se
           comporta. Cada canal tem sua <strong>própria configuração</strong> — troque entre WhatsApp
@@ -148,12 +150,12 @@ export default function AjudaPage() {
           <li><strong>Regras de escalonamento</strong> — quando a IA deve passar para um humano (ex.: pedido de reembolso).</li>
         </ul>
         <div className="tip">
-          💡 Quanto mais completa a <strong>base de conhecimento</strong>, melhores e mais certas as
+          Quanto mais completa a <strong>base de conhecimento</strong>, melhores e mais certas as
           respostas da IA.
         </div>
       </Item>
 
-      <Item icon="💬" titulo="Conversas (inbox)">
+      <Item icon="chat" titulo="Conversas (inbox)">
         <p>
           É onde ficam todas as conversas, de todos os canais, em tempo real. Recursos:
         </p>
@@ -164,12 +166,12 @@ export default function AjudaPage() {
           <li><strong>Envio manual</strong> — você digita e envia mensagens como atendente humano direto pela tela.</li>
         </ul>
         <div className="tip">
-          💡 Diferença importante: desligar a IA em <em>Configuração da IA</em> afeta o canal inteiro;
+          Diferença importante: desligar a IA em <em>Configuração da IA</em> afeta o canal inteiro;
           desligar na conversa afeta só aquele contato.
         </div>
       </Item>
 
-      <Item icon="📋" titulo="Pipeline (funil de vendas / Kanban)">
+      <Item icon="pipeline" titulo="Pipeline (funil de vendas / Kanban)">
         <p>
           É um quadro que organiza seus contatos por etapa da venda — parecido com post-its em
           colunas. O diferencial: a <strong>IA preenche e move os cards sozinha</strong>, lendo as
@@ -187,7 +189,7 @@ export default function AjudaPage() {
         </p>
       </Item>
 
-      <Item icon="👤" titulo="Perfil e dados do negócio">
+      <Item icon="user" titulo="Perfil e dados do negócio">
         <p>Na tela de Perfil você gerencia:</p>
         <ul>
           <li><strong>Nome de exibição</strong> e <strong>foto</strong>;</li>
@@ -196,7 +198,7 @@ export default function AjudaPage() {
         </ul>
       </Item>
 
-      <Item icon="🛡️" titulo="Segurança e privacidade">
+      <Item icon="shield" titulo="Segurança e privacidade">
         <ul>
           <li><strong>Acesso protegido</strong> por login em todas as telas;</li>
           <li><strong>Credenciais criptografadas</strong> — os tokens do WhatsApp/Instagram são guardados de forma cifrada;</li>
@@ -205,14 +207,14 @@ export default function AjudaPage() {
         </ul>
       </Item>
 
-      <Item icon="❓" titulo="Perguntas frequentes">
+      <Item icon="help" titulo="Perguntas frequentes">
         <p><strong>A IA respondeu errado / não respondeu.</strong> Verifique se a IA está ligada (no canal e na conversa) e melhore a <em>base de conhecimento</em> com mais informações.</p>
         <p><strong>Quero atender eu mesmo um cliente.</strong> Abra a conversa, desligue a IA daquela conversa e use o envio manual.</p>
         <p><strong>Um canal aparece “Desconectado”.</strong> Vá na tela do canal, confira as credenciais e clique em <em>Testar conexão</em>.</p>
         <p><strong>Os números do Dashboard estão zerados.</strong> É normal enquanto não houver conversas — eles se preenchem sozinhos conforme as mensagens chegam.</p>
       </Item>
 
-      <Item icon="📖" titulo="Glossário (palavras técnicas)">
+      <Item icon="book" titulo="Glossário (palavras técnicas)">
         <ul>
           <li><strong>IA</strong> — Inteligência Artificial; o atendente virtual que responde automaticamente.</li>
           <li><strong>Canal</strong> — cada meio de atendimento (WhatsApp ou Instagram).</li>
@@ -227,11 +229,11 @@ export default function AjudaPage() {
       </Item>
 
       <div className="card" style={{ marginTop: 20, display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
-        <span style={{ fontSize: 22 }}>🧭</span>
+        <span className="help-ico"><Icon name="dashboard" size={18} /></span>
         <div style={{ fontSize: 14, color: "var(--muted)", flex: 1, minWidth: 200 }}>
-          Precisa de mais alguma coisa? Comece pelo <strong style={{ color: "var(--text)" }}>Dashboard</strong> e siga o checklist de configuração.
+          Precisa de mais alguma coisa? Comece pelo <strong style={{ color: "var(--text)" }}>Painel</strong> e siga o checklist de configuração.
         </div>
-        <Link href="/" className="btn secondary" style={{ fontSize: 13 }}>Ir para o Dashboard</Link>
+        <Link href="/" className="btn secondary">Ir para o painel <Icon name="arrow" size={15} /></Link>
       </div>
     </div>
   );

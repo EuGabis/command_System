@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { supabaseBrowser } from "@/lib/supabaseBrowser";
+import Icon from "./Icon";
 
 export default function LogoutButton() {
   const router = useRouter();
@@ -12,7 +13,7 @@ export default function LogoutButton() {
   }
   return (
     <button onClick={sair} className="logout-btn" title="Sair">
-      <span className="nav-ico">⎋</span>
+      <span className="nav-ico"><Icon name="logout" size={19} /></span>
       <span className="nav-text">Sair</span>
     </button>
   );

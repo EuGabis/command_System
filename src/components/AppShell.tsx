@@ -3,18 +3,23 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import LogoutButton from "./LogoutButton";
+import Icon, { type IconName } from "./Icon";
 
-const nav = [
-  { href: "/", label: "Dashboard", icon: "📊" },
-  { href: "/whatsapp", label: "WhatsApp", icon: "🟢" },
-  { href: "/instagram", label: "Instagram", icon: "📸" },
-  { href: "/ia", label: "IA", icon: "🤖" },
-  { href: "/conversas", label: "Conversas", icon: "💬" },
-  { href: "/pipeline", label: "Pipeline", icon: "📋" },
+const nav: { href: string; label: string; icon: IconName }[] = [
+  { href: "/", label: "Dashboard", icon: "dashboard" },
+  { href: "/whatsapp", label: "WhatsApp", icon: "whatsapp" },
+  { href: "/instagram", label: "Instagram", icon: "instagram" },
+  { href: "/ia", label: "IA", icon: "ai" },
+  { href: "/conversas", label: "Conversas", icon: "chat" },
+  { href: "/pipeline", label: "Pipeline", icon: "pipeline" },
 ];
 
 // Item extra só no menu lateral (no mobile fica acessível pelo avatar da top bar)
-const perfilItem = { href: "/perfil", label: "Perfil", icon: "👤" };
+const perfilItem: { href: string; label: string; icon: IconName } = {
+  href: "/perfil",
+  label: "Perfil",
+  icon: "user",
+};
 
 function isActive(pathname: string, href: string) {
   return href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -38,12 +43,13 @@ function Avatar({ url, size = 34 }: { url: string | null; size?: number }) {
         height: size,
         borderRadius: "50%",
         background: "var(--panel-2)",
+        border: "1px solid var(--border)",
         display: "grid",
         placeItems: "center",
-        fontSize: size * 0.42,
+        color: "var(--muted)",
       }}
     >
-      👤
+      <Icon name="user" size={Math.round(size * 0.52)} />
     </div>
   );
 }
@@ -80,7 +86,7 @@ export default function AppShell({
               className={`navlink${isActive(pathname, n.href) ? " active" : ""}`}
               title={n.label === "IA" ? "Configuração da IA" : n.label}
             >
-              <span className="nav-ico">{n.icon}</span>
+              <span className="nav-ico"><Icon name={n.icon} size={19} /></span>
               <span className="nav-text">{n.label === "IA" ? "Configuração da IA" : n.label}</span>
             </Link>
           ))}
@@ -110,12 +116,12 @@ export default function AppShell({
       <nav className="bottomnav">
         {nav.map((n) => (
           <Link key={n.href} href={n.href} className={`tab${isActive(pathname, n.href) ? " active" : ""}`}>
-            <span className="ico">{n.icon}</span>
+            <span className="ico"><Icon name={n.icon} size={21} /></span>
             <span>{n.label}</span>
           </Link>
         ))}
         <Link href="/perfil" className={`tab${isActive(pathname, "/perfil") ? " active" : ""}`}>
-          <span className="ico">👤</span>
+          <span className="ico"><Icon name="user" size={21} /></span>
           <span>Perfil</span>
         </Link>
       </nav>
@@ -127,7 +133,7 @@ export default function AppShell({
         title="Ajuda"
         className={`help-fab${pathname.startsWith("/ajuda") ? " active" : ""}`}
       >
-        ?
+        <Icon name="help" size={24} />
       </Link>
     </div>
   );

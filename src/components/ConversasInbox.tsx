@@ -258,7 +258,7 @@ export default function ConversasInbox({ initial }: { initial: Conversation[] })
                   color: plat === p ? "#fff" : "var(--text)",
                 }}
               >
-                {p === "todos" ? "Todos" : p === "whatsapp" ? "🟢 WhatsApp" : "📸 Instagram"}
+                {p === "todos" ? "Todos" : p === "whatsapp" ? "WhatsApp" : "Instagram"}
               </button>
             ))}
           </div>
@@ -337,7 +337,7 @@ export default function ConversasInbox({ initial }: { initial: Conversation[] })
                   {nome}
                 </div>
                 <div style={{ fontSize: 12, color: "var(--muted)" }}>
-                  {conversa.platform === "whatsapp" ? "🟢 WhatsApp" : "📸 Instagram"} · +{conversa.contato}
+                  {conversa.platform === "whatsapp" ? "WhatsApp" : "Instagram"} · +{conversa.contato}
                 </div>
               </div>
               <button
@@ -364,7 +364,7 @@ export default function ConversasInbox({ initial }: { initial: Conversation[] })
                       <div className={`bubble ${cls}`}>
                         <MensagemTexto texto={m.conteudo} />
                         <div className="meta">
-                          {m.autor === "ia" ? "🤖 IA" : m.autor === "humano" ? "Você" : "Cliente"} · {horaCurta(m.created_at)}
+                          {m.autor === "ia" ? "IA" : m.autor === "humano" ? "Você" : "Cliente"} · {horaCurta(m.created_at)}
                         </div>
                       </div>
                     </div>
@@ -440,7 +440,7 @@ export default function ConversasInbox({ initial }: { initial: Conversation[] })
             <div style={{ borderTop: "1px solid var(--border)", paddingTop: 18 }}>
               <div style={{ fontSize: 11, color: "var(--muted)", letterSpacing: 1, marginBottom: 10 }}>CANAL</div>
               <div style={{ fontSize: 14 }}>
-                {conversa.platform === "whatsapp" ? "🟢 WhatsApp" : "📸 Instagram"}
+                {conversa.platform === "whatsapp" ? "WhatsApp" : "Instagram"}
               </div>
             </div>
           </div>
