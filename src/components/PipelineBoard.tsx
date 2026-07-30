@@ -33,8 +33,13 @@ function LeadCard({
       onDragStart={() => onDragStart(c.id)}
     >
       <div style={{ display: "flex", justifyContent: "space-between", gap: 8, alignItems: "center" }}>
-        <strong style={{ fontSize: 14, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-          {c.platform === "whatsapp" ? "🟢" : "📸"} {nome}
+        <strong style={{ fontSize: 14, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: 8 }}>
+          <span
+            className="dot"
+            title={c.platform === "whatsapp" ? "WhatsApp" : "Instagram"}
+            style={{ background: c.platform === "whatsapp" ? "var(--green)" : "#c4497b", flex: "none" }}
+          />
+          {nome}
         </strong>
       </div>
       {c.lead_resumo && (

@@ -7,8 +7,8 @@ import type { Platform } from "@/lib/types";
 export const dynamic = "force-dynamic";
 
 const canais: { key: Platform; label: string }[] = [
-  { key: "whatsapp", label: "🟢 WhatsApp" },
-  { key: "instagram", label: "📸 Instagram" },
+  { key: "whatsapp", label: "WhatsApp" },
+  { key: "instagram", label: "Instagram" },
 ];
 
 export default async function IaPage({
@@ -22,9 +22,10 @@ export default async function IaPage({
 
   return (
     <div>
-      <h1 style={{ fontSize: 26, fontWeight: 800, marginBottom: 4 }}>Configuração da IA</h1>
+      <div className="eyebrow" style={{ marginBottom: 8 }}>Inteligência artificial</div>
+      <h1 style={{ fontSize: 25, fontWeight: 700, marginBottom: 4 }}>Atendente virtual</h1>
       <p style={{ color: "var(--muted)", marginBottom: 16 }}>
-        Configure um atendente virtual diferente para cada canal.
+        Configure um atendente diferente para cada canal.
       </p>
 
       <div style={{ display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap" }}>
@@ -37,11 +38,10 @@ export default async function IaPage({
               className="badge"
               style={{
                 textDecoration: "none",
-                color: ativo ? "#fff" : "var(--text)",
+                color: ativo ? "var(--on-brand)" : "var(--text)",
                 background: ativo ? "var(--brand)" : "var(--panel-2)",
                 borderColor: ativo ? "var(--brand)" : "var(--border)",
-                padding: "6px 14px",
-                fontSize: 13,
+                padding: "7px 15px",
               }}
             >
               {c.label}
@@ -52,7 +52,7 @@ export default async function IaPage({
 
       {!isOpenAIConfigured() && (
         <div className="card" style={{ borderColor: "var(--amber)", color: "var(--amber)", marginBottom: 16, fontSize: 13 }}>
-          ⚠️ OPENAI_API_KEY não configurada — a IA responderá em modo simulado até você definir a chave.
+          A chave da OpenAI ainda não foi configurada — a IA responde em modo simulado até você defini-la.
         </div>
       )}
 

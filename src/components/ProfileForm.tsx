@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabaseBrowser } from "@/lib/supabaseBrowser";
+import Icon from "./Icon";
 
 interface ProfileData {
   nome: string;
@@ -148,12 +149,13 @@ export default function ProfileForm({
                 height: 64,
                 borderRadius: "50%",
                 background: "var(--panel-2)",
+                border: "1px solid var(--border)",
                 display: "grid",
                 placeItems: "center",
-                fontSize: 24,
+                color: "var(--muted)",
               }}
             >
-              👤
+              <Icon name="user" size={30} />
             </div>
           )}
           <label className="btn secondary" style={{ cursor: "pointer" }}>
