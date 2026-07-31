@@ -1,4 +1,7 @@
 import OrcamentoForm from "@/components/site/OrcamentoForm";
+import Reveal from "@/components/site/Reveal";
+import CountUp from "@/components/site/CountUp";
+import ChatDemo from "@/components/site/ChatDemo";
 
 export const dynamic = "force-dynamic";
 
@@ -59,26 +62,32 @@ export default function SitePage() {
 
       {/* Hero */}
       <section className="g-hero">
+        <div className="g-sun" aria-hidden />
+        <svg className="g-route" viewBox="0 0 660 300" preserveAspectRatio="none" aria-hidden>
+          <path d="M 40 250 Q 300 60 620 180" />
+        </svg>
+        <div className="g-plane" aria-hidden>✈️</div>
+
         <div className="g-container g-hero-grid">
           <div>
             <span className="g-eyebrow" style={{ color: "#ffd9a8" }}>✈️ Agência de viagens · há 9 anos</span>
             <h1 style={{ marginTop: 14 }}>Sonhos viram <em>passagens reais</em></h1>
             <p className="g-hero-sub">
               Passagens nacionais e internacionais, pacotes e emissões com as melhores tarifas —
-              e suporte 24h do começo ao fim da sua viagem.
+              e um atendimento com IA que responde <strong>na hora</strong>, 24h por dia.
             </p>
             <div className="g-hero-badges">
-              <span className="g-chip">🌍 Nacional & Internacional</span>
+              <span className="g-chip f">🌍 Nacional & Internacional</span>
               <span className="g-chip">💳 Parcele sua viagem</span>
               <span className="g-chip">💬 Suporte 24h</span>
             </div>
             <div className="g-stats">
-              <div className="g-stat"><div className="num">9+</div><div className="lbl">anos de estrada</div></div>
-              <div className="g-stat"><div className="num">24h</div><div className="lbl">de suporte</div></div>
+              <div className="g-stat"><div className="num"><CountUp to={9} suffix="+" /></div><div className="lbl">anos de estrada</div></div>
+              <div className="g-stat"><div className="num"><CountUp to={24} suffix="h" /></div><div className="lbl">de suporte</div></div>
               <div className="g-stat"><div className="num">∞</div><div className="lbl">destinos possíveis</div></div>
             </div>
           </div>
-          <div id="orcamento-hero">
+          <div id="orcamento">
             <OrcamentoForm />
           </div>
         </div>
@@ -93,12 +102,14 @@ export default function SitePage() {
             <p>Da passagem ao passaporte, cuidamos de cada detalhe para você só se preocupar em aproveitar.</p>
           </div>
           <div className="g-cards">
-            {servicos.map((s) => (
-              <div className="g-card" key={s.t}>
-                <div className="ic">{s.ic}</div>
-                <h3>{s.t}</h3>
-                <p>{s.d}</p>
-              </div>
+            {servicos.map((s, i) => (
+              <Reveal key={s.t} delay={i * 70}>
+                <div className="g-card">
+                  <div className="ic">{s.ic}</div>
+                  <h3>{s.t}</h3>
+                  <p>{s.d}</p>
+                </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -113,14 +124,41 @@ export default function SitePage() {
             <p>Três passos até a sua próxima viagem.</p>
           </div>
           <div className="g-steps">
-            {passos.map((p) => (
-              <div className="g-step" key={p.n}>
-                <div className="n">{p.n}</div>
-                <h3>{p.t}</h3>
-                <p>{p.d}</p>
-              </div>
+            {passos.map((p, i) => (
+              <Reveal key={p.n} delay={i * 100}>
+                <div className="g-step">
+                  <div className="n">{p.n}</div>
+                  <h3>{p.t}</h3>
+                  <p>{p.d}</p>
+                </div>
+              </Reveal>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Assinatura: atendimento com IA 24h */}
+      <section className="g-section alt">
+        <div className="g-container g-signature">
+          <Reveal>
+            <div>
+              <span className="g-eyebrow">Atendimento que nunca dorme</span>
+              <h2 style={{ fontSize: "clamp(28px,4vw,44px)", fontWeight: 800, marginTop: 10 }}>
+                A gente responde <span style={{ color: "var(--coral-dk)" }}>na hora</span>, a qualquer hora
+              </h2>
+              <p style={{ color: "var(--muted)", marginTop: 14, fontSize: 17, maxWidth: "46ch" }}>
+                Nada de esperar dias por um orçamento. Nosso atendimento inteligente responde na
+                hora, entende o que você precisa e já adianta as melhores opções — de dia, de
+                madrugada, no fim de semana.
+              </p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 20 }}>
+                <div className="g-feat"><div className="ic">⚡</div><div><h3>Resposta imediata</h3><p>Sem fila, sem “aguarde”. Você é atendido no primeiro “oi”.</p></div></div>
+                <div className="g-feat"><div className="ic">🕓</div><div><h3>24 horas por dia</h3><p>Inclusive quando a concorrência está fechada.</p></div></div>
+                <div className="g-feat"><div className="ic">👩‍💻</div><div><h3>Time humano quando precisa</h3><p>Casos especiais caem direto com nossos consultores.</p></div></div>
+              </div>
+            </div>
+          </Reveal>
+          <ChatDemo />
         </div>
       </section>
 
@@ -133,11 +171,13 @@ export default function SitePage() {
             <p>Alguns dos lugares mais pedidos pelos nossos viajantes — mas levamos você a qualquer canto do mundo.</p>
           </div>
           <div className="g-dest">
-            {destinos.map((d) => (
-              <div className="g-dest-card" key={d.t} style={{ backgroundImage: d.g }}>
-                <strong>{d.t}</strong>
-                <span>{d.s}</span>
-              </div>
+            {destinos.map((d, i) => (
+              <Reveal key={d.t} delay={i * 80}>
+                <div className="g-dest-card" style={{ backgroundImage: d.g }}>
+                  <strong>{d.t}</strong>
+                  <span>{d.s}</span>
+                </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -151,14 +191,16 @@ export default function SitePage() {
             <h2>Viajar com quem entende faz diferença</h2>
           </div>
           <div className="g-feats">
-            {feats.map((f) => (
-              <div className="g-feat" key={f.t}>
-                <div className="ic">{f.ic}</div>
-                <div>
-                  <h3>{f.t}</h3>
-                  <p>{f.d}</p>
+            {feats.map((f, i) => (
+              <Reveal key={f.t} delay={i * 80}>
+                <div className="g-feat">
+                  <div className="ic">{f.ic}</div>
+                  <div>
+                    <h3>{f.t}</h3>
+                    <p>{f.d}</p>
+                  </div>
                 </div>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -172,33 +214,45 @@ export default function SitePage() {
             <h2>Histórias de quem já embarcou</h2>
           </div>
           <div className="g-quotes">
-            {depoimentos.map((d) => (
-              <div className="g-testi" key={d.who}>
-                <div className="g-stars">★★★★★</div>
-                <p style={{ marginTop: 8 }}>&ldquo;{d.txt}&rdquo;</p>
-                <div className="who">{d.who}</div>
-              </div>
+            {depoimentos.map((d, i) => (
+              <Reveal key={d.who} delay={i * 90}>
+                <div className="g-testi">
+                  <div className="g-stars">★★★★★</div>
+                  <p style={{ marginTop: 8 }}>&ldquo;{d.txt}&rdquo;</p>
+                  <div className="who">{d.who}</div>
+                </div>
+              </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA final */}
-      <section className="g-section sky" id="orcamento">
-        <div className="g-container g-cta">
-          <div>
-            <span className="g-eyebrow" style={{ color: "#ffd9a8" }}>Bora viajar?</span>
-            <h2 style={{ fontSize: "clamp(30px,4.5vw,50px)", marginTop: 10 }}>Peça sua cotação agora</h2>
-            <p style={{ color: "rgba(255,255,255,.85)", fontSize: 17, marginTop: 14, maxWidth: "40ch" }}>
-              Preencha os dados da sua viagem e receba as melhores opções direto no seu WhatsApp — sem compromisso.
-            </p>
-            <a className="g-btn g-btn-white g-btn-lg" href={waLink} target="_blank" rel="noopener" style={{ marginTop: 22 }}>
-              💬 Falar no WhatsApp
-            </a>
-          </div>
-          <div style={{ background: "#fff", borderRadius: 20, padding: 24, color: "var(--ink)", boxShadow: "0 30px 60px rgba(6,30,50,.35)" }}>
-            <OrcamentoForm variant="plain" />
-          </div>
+      {/* CTA final — faixa estilo cartão de embarque */}
+      <section className="g-section">
+        <div className="g-container">
+          <Reveal>
+            <div className="g-boarding">
+              <div className="stub">
+                <span className="lbl">BOARDING</span>
+                <span className="code">GAAB</span>
+                <span className="lbl">✈ GO</span>
+              </div>
+              <div className="body">
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 20, alignItems: "center", justifyContent: "space-between" }}>
+                  <div>
+                    <h2 style={{ fontSize: "clamp(24px,3.4vw,36px)" }}>Seu próximo destino te espera</h2>
+                    <p style={{ color: "var(--muted)", marginTop: 8, fontSize: 16, maxWidth: "46ch" }}>
+                      Preencha o formulário no topo ou fale agora no WhatsApp — respondemos na hora, 24h por dia.
+                    </p>
+                  </div>
+                  <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                    <a className="g-btn g-btn-primary g-btn-lg" href="#orcamento">Pedir cotação</a>
+                    <a className="g-btn g-btn-ghost g-btn-lg" href={waLink} target="_blank" rel="noopener">💬 WhatsApp</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Reveal>
         </div>
       </section>
 

@@ -176,3 +176,86 @@
 .g-stats { display: flex; gap: 36px; flex-wrap: wrap; margin-top: 30px; }
 .g-stat .num { font-family: var(--font-display); font-weight: 900; font-size: 34px; color: var(--gold); }
 .g-stat .lbl { font-size: 13px; color: rgba(255,255,255,.8); }
+
+/* ===== Animações ===== */
+.g-reveal { opacity: 0; transform: translateY(26px); transition: opacity .6s ease, transform .6s ease; }
+.g-reveal.in { opacity: 1; transform: none; }
+
+@keyframes g-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+@keyframes g-sun { 0%, 100% { transform: scale(1); opacity: .8; } 50% { transform: scale(1.08); opacity: 1; } }
+@keyframes g-draw { to { stroke-dashoffset: 0; } }
+@keyframes g-plane { from { offset-distance: 0%; } to { offset-distance: 100%; } }
+@keyframes g-shine { to { transform: translateX(220%); } }
+
+/* sol decorativo no hero */
+.g-sun { position: absolute; z-index: 1; top: 8%; right: 12%; width: 130px; height: 130px; border-radius: 50%;
+  background: radial-gradient(circle, #ffd77a, #ffb020 55%, transparent 72%); filter: blur(2px); animation: g-sun 5s ease-in-out infinite; }
+
+/* rota de voo animada */
+.g-route { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; pointer-events: none; }
+.g-route path { stroke: rgba(255,255,255,.55); stroke-width: 2; stroke-dasharray: 8 8; fill: none;
+  stroke-dashoffset: 400; animation: g-draw 3s ease forwards .3s; }
+.g-plane {
+  position: absolute; inset: 0; z-index: 2; font-size: 24px;
+  offset-path: path("M 40 250 Q 300 60 620 180"); offset-rotate: auto;
+  animation: g-plane 6s ease-in-out infinite; pointer-events: none;
+}
+.g-hero .g-chip.f { animation: g-float 4s ease-in-out infinite; }
+
+/* botão com brilho */
+.g-btn-primary { position: relative; overflow: hidden; }
+.g-btn-primary::after {
+  content: ""; position: absolute; top: 0; left: -60%; width: 40%; height: 100%; transform: translateX(0);
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,.35), transparent);
+  animation: g-shine 3.2s ease-in-out infinite;
+}
+
+/* ===== Seção-assinatura: atendimento IA (telefone) ===== */
+.g-signature { display: grid; grid-template-columns: 1fr 380px; gap: 48px; align-items: center; }
+@media (max-width: 900px) { .g-signature { grid-template-columns: 1fr; justify-items: center; } }
+
+.g-phone {
+  width: 340px; max-width: 100%; background: #0b141a; border-radius: 26px; padding: 12px;
+  border: 8px solid #060d12; box-shadow: 0 30px 70px rgba(0,0,0,.4); animation: g-float 6s ease-in-out infinite;
+}
+.g-phone-top { display: flex; align-items: center; gap: 10px; padding: 8px 8px 12px; }
+.g-phone-ava { width: 38px; height: 38px; border-radius: 50%; background: var(--coral); color: #fff; display: grid; place-items: center; font-family: var(--font-display); font-weight: 800; }
+.g-phone-name { color: #fff; font-weight: 700; font-size: 15px; }
+.g-phone-status { font-size: 11.5px; color: #8fce9f; display: flex; align-items: center; gap: 5px; }
+.g-online { width: 7px; height: 7px; border-radius: 50%; background: #2ecc71; box-shadow: 0 0 0 3px rgba(46,204,113,.25); }
+.g-phone-body {
+  height: 340px; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px;
+  background:
+    radial-gradient(600px 300px at 70% 0%, rgba(255,176,32,.06), transparent),
+    #0e1a22;
+  border-radius: 14px;
+}
+.g-msg { max-width: 82%; padding: 8px 12px; border-radius: 14px; font-size: 13.5px; line-height: 1.4; animation: g-pop .28s ease; }
+@keyframes g-pop { from { opacity: 0; transform: translateY(8px) scale(.97); } to { opacity: 1; transform: none; } }
+.g-msg.them { align-self: flex-start; background: #21313c; color: #eaf2f6; border-bottom-left-radius: 4px; }
+.g-msg.me { align-self: flex-end; background: #2f7d4f; color: #eafff2; border-bottom-right-radius: 4px; }
+.g-typing { display: inline-flex; gap: 4px; align-items: center; }
+.g-typing span { width: 6px; height: 6px; border-radius: 50%; background: #9fb4c0; animation: g-blink 1.2s infinite; }
+.g-typing span:nth-child(2) { animation-delay: .2s; }
+.g-typing span:nth-child(3) { animation-delay: .4s; }
+@keyframes g-blink { 0%, 60%, 100% { opacity: .3; } 30% { opacity: 1; } }
+
+/* ===== Faixa CTA estilo cartão de embarque ===== */
+.g-boarding {
+  display: flex; align-items: center; gap: 0; background: #fff; border-radius: 18px; overflow: hidden;
+  box-shadow: 0 24px 50px rgba(6,30,50,.3); border: 1px solid var(--line);
+}
+.g-boarding .stub {
+  background: var(--sky); color: #fff; padding: 26px 22px; display: grid; place-items: center; gap: 6px;
+  border-right: 2px dashed rgba(255,255,255,.4); position: relative;
+}
+.g-boarding .stub .code { font-family: var(--font-display); font-weight: 900; font-size: 30px; color: var(--gold); }
+.g-boarding .stub .lbl { font-size: 10px; letter-spacing: 2px; opacity: .8; }
+.g-boarding .body { padding: 24px 26px; flex: 1; }
+@media (max-width: 620px) { .g-boarding { flex-direction: column; align-items: stretch; text-align: center; } .g-boarding .stub { border-right: none; border-bottom: 2px dashed rgba(255,255,255,.4); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .g-reveal { opacity: 1; transform: none; transition: none; }
+  .g-sun, .g-plane, .g-phone, .g-btn-primary::after, .g-hero .g-chip.f, .g-route path { animation: none; }
+  .g-plane { offset-distance: 60%; }
+}
