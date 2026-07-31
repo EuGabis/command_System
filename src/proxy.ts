@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 // Rotas públicas (sem login): tela de login, APIs de auth e webhooks da Meta.
-const PUBLIC_PREFIXES = ["/login", "/api/auth", "/api/webhook"];
+const PUBLIC_PREFIXES = ["/login", "/api/auth", "/api/webhook", "/site", "/api/orcamento"];
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
