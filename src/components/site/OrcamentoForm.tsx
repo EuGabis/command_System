@@ -62,7 +62,7 @@ export default function OrcamentoForm({ variant = "card" }: { variant?: "card" |
 
       {status === "ok" ? (
         <div className="g-note ok" style={{ marginTop: variant === "card" ? 14 : 0 }}>
-          ✅ Recebemos seu pedido! Nossa equipe vai te chamar no WhatsApp com a cotação. Boa viagem! ✈️
+          Recebemos seu pedido. Nossa equipe vai te chamar no WhatsApp com a cotação. Boa viagem!
         </div>
       ) : (
         <>
@@ -121,7 +121,7 @@ export default function OrcamentoForm({ variant = "card" }: { variant?: "card" |
           {status === "err" && <div className="g-note err">{erro}</div>}
 
           <button className="g-btn g-btn-primary g-btn-lg" type="submit" style={{ width: "100%", marginTop: 16, justifyContent: "center" }} disabled={status === "enviando"}>
-            {status === "enviando" ? "Enviando…" : "Solicitar cotação ✈️"}
+            {status === "enviando" ? "Enviando…" : "Solicitar cotação"}
           </button>
         </>
       )}
