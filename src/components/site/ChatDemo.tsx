@@ -9,13 +9,13 @@ interface Step {
 }
 
 const STEPS: Step[] = [
-  { who: "cliente", text: "Oi! Quero uma passagem pra Lisboa 🇵🇹", pause: 900 },
-  { who: "ai", text: "Olá! ✈️ Ótima escolha! Pra quando seria e quantas pessoas?", pause: 1100 },
+  { who: "cliente", text: "Olá, quero uma passagem para Lisboa", pause: 900 },
+  { who: "ai", text: "Olá! Ótima escolha. Para quando seria e quantas pessoas?", pause: 1100 },
   { who: "cliente", text: "Ida 10/08, volta 20/08 — 2 adultos", pause: 1000 },
-  { who: "ai", text: "Perfeito! Já estou buscando as melhores opções pra vocês… 😉", pause: 1400 },
-  { who: "ai", text: "Achei ida e volta a partir de R$ 3.480. Quer que eu segure essa tarifa?", pause: 2200 },
-  { who: "cliente", text: "Quero sim!! 🙌", pause: 1200 },
-  { who: "ai", text: "Fechado! Vou te passar o link de pagamento. Boa viagem! 🌅", pause: 2600 },
+  { who: "ai", text: "Perfeito. Já estou buscando as melhores opções para vocês.", pause: 1400 },
+  { who: "ai", text: "Encontrei ida e volta a partir de R$ 3.480. Quer que eu segure essa tarifa?", pause: 2200 },
+  { who: "cliente", text: "Quero sim, por favor", pause: 1200 },
+  { who: "ai", text: "Fechado. Envio o link de pagamento em seguida. Boa viagem!", pause: 2600 },
 ];
 
 export default function ChatDemo() {
