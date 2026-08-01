@@ -37,7 +37,7 @@ export default async function ChannelOverview({
             {conversas.map((c) => (
               <Link
                 key={c.id}
-                href={`/conversas?id=${c.id}`}
+                href={`/painel/conversas?id=${c.id}`}
                 style={{
                   display: "flex",
                   justifyContent: "space-between",

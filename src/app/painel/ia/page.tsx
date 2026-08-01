@@ -34,7 +34,7 @@ export default async function IaPage({
           return (
             <Link
               key={c.key}
-              href={`/ia?canal=${c.key}`}
+              href={`/painel/ia?canal=${c.key}`}
               className="badge"
               style={{
                 textDecoration: "none",

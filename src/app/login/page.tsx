@@ -28,7 +28,7 @@ export default function LoginPage() {
     try {
       const { error } = await supabaseBrowser().auth.signInWithPassword({ email, password: senha });
       if (error) throw new Error("E-mail ou senha inválidos.");
-      router.push("/");
+      router.push("/painel");
       router.refresh();
     } catch (e) {
       setErro(String(e instanceof Error ? e.message : e));
@@ -51,7 +51,7 @@ export default function LoginPage() {
       if (!res.ok) throw new Error(data.error);
       const { error } = await supabaseBrowser().auth.signInWithPassword({ email, password: senha });
       if (error) throw error;
-      router.push("/");
+      router.push("/painel");
       router.refresh();
     } catch (e) {
       setErro(String(e instanceof Error ? e.message : e));
