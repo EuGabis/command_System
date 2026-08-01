@@ -82,6 +82,7 @@ export async function POST(req: NextRequest) {
         if (midia.kind === "image") aiText = midia.caption || "[o cliente enviou uma imagem]";
         else if (midia.kind === "video") aiText = midia.caption || "[o cliente enviou um vídeo]";
         else if (midia.kind === "document") { aiText = `[o cliente enviou um documento${midia.fileName ? `: ${midia.fileName}` : ""}]`; conteudo = midia.caption || midia.fileName || "📄 Documento"; }
+        else if (midia.kind === "audio" && !aiText) { aiText = "[o cliente enviou um áudio]"; conteudo = conteudo || "🎤 Áudio recebido"; }
 
         await processarMensagemRecebida("whatsapp", contato, conteudo, msg.pushName, {
           evolutionInstance: instance,
