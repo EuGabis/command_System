@@ -70,10 +70,10 @@ export default function LoginPage() {
         <div className="login-scan" />
 
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <span className="login-mark">C</span>
+          <span className="login-mark">G</span>
           <div>
-            <div className="eyebrow">Console de atendimento</div>
-            <div style={{ fontWeight: 700, fontSize: 16, marginTop: 3 }}>Central de Comando</div>
+            <div className="eyebrow">Central de Comando</div>
+            <div style={{ fontWeight: 800, fontSize: 17, marginTop: 3, fontFamily: "var(--font-display)" }}>GAAB<span style={{ color: "var(--brand)" }}>TUR</span></div>
           </div>
         </div>
 
@@ -110,8 +110,8 @@ export default function LoginPage() {
       <main className="login-panel">
         <div className="login-form">
           <div className="login-panel-brand">
-            <span className="login-mark" style={{ width: 40, height: 40, fontSize: 18 }}>C</span>
-            <strong style={{ fontSize: 16 }}>Central de Comando</strong>
+            <span className="login-mark" style={{ width: 40, height: 40, fontSize: 18 }}>G</span>
+            <strong style={{ fontSize: 16, fontFamily: "var(--font-display)" }}>GAAB<span style={{ color: "var(--brand)" }}>TUR</span></strong>
           </div>
 
           <div className="eyebrow" style={{ marginBottom: 10 }}>

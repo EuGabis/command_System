@@ -1,25 +1,26 @@
 @import "tailwindcss";
 
 :root {
-  /* Grafite quente (não azul) + acento âmbar/cobre — "instrumento" */
-  --bg: #0e0f11;
-  --panel: #16181b;
-  --panel-2: #1e2126;
-  --border: #2a2e34;
-  --border-strong: #3a4046;
-  --text: #e8e5df;       /* off-white quente, leitura de instrumento */
-  --muted: #8b9099;
-  --brand: #e0993e;      /* âmbar/cobre — único acento forte */
-  --brand-2: #f2b457;
-  --on-brand: #1a1206;   /* texto sobre âmbar */
-  --green: #46b982;      /* conectado / ok */
-  --amber: #e0993e;      /* atenção (mesmo do acento) */
+  /* Identidade GAABTUR — preto + laranja (igual ao site) */
+  --bg: #141416;         /* ink do site */
+  --panel: #1c1d20;      /* charcoal */
+  --panel-2: #26272b;    /* painel */
+  --border: #2d2f34;
+  --border-strong: #3c3f45;
+  --text: #ededee;       /* off-white neutro */
+  --muted: #9aa0a8;
+  --brand: #f2871e;      /* laranja GAABTUR — acento */
+  --brand-2: #f7a340;
+  --on-brand: #241200;   /* texto sobre laranja */
+  --green: #34c66b;      /* conectado / ok */
+  --amber: #f2871e;      /* atenção (mesmo acento) */
   --red: #e5544b;        /* erro / alerta */
 
-  --r-card: 10px;
-  --r-ctrl: 8px;
+  --r-card: 12px;
+  --r-ctrl: 9px;
 
-  --font-sans: var(--font-plex-sans, system-ui, -apple-system, Segoe UI, Roboto, sans-serif);
+  --font-sans: var(--font-inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif);
+  --font-display: var(--font-montserrat, var(--font-inter, system-ui, sans-serif));
   --font-mono: var(--font-plex-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
 }
 
@@ -33,7 +34,7 @@ html, body {
 
 * { box-sizing: border-box; }
 
-h1, h2, h3 { letter-spacing: -0.01em; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 700; letter-spacing: -0.02em; }
 
 /* Rótulo de instrumento: mono, maiúsculas, espaçado */
 .eyebrow {
@@ -160,7 +161,7 @@ h1, h2, h3 { letter-spacing: -0.01em; }
   display: grid; place-items: center;
 }
 .brand-text { display: flex; flex-direction: column; min-width: 0; }
-.brand-title { font-weight: 700; font-size: 14.5px; line-height: 1.15; white-space: nowrap; letter-spacing: -0.01em; }
+.brand-title { font-family: var(--font-display); font-weight: 800; font-size: 15px; line-height: 1.15; white-space: nowrap; letter-spacing: 0.01em; }
 .brand-sub { font-size: 11px; color: var(--muted); white-space: nowrap; }
 
 /* rodapé da sidebar (usuário + sair) */

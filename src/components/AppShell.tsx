@@ -71,10 +71,10 @@ export default function AppShell({
       {/* ===== Sidebar (desktop) ===== */}
       <aside className="sidebar">
         <div className="brand">
-          <span className="brand-mark">C</span>
+          <span className="brand-mark">G</span>
           <span className="brand-text">
-            <span className="brand-title">Central de Comando</span>
-            <span className="brand-sub">Atendimento com IA</span>
+            <span className="brand-title">GAAB<span style={{ color: "var(--brand)" }}>TUR</span></span>
+            <span className="brand-sub">Central de Comando</span>
           </span>
         </div>
 
@@ -103,7 +103,7 @@ export default function AppShell({
 
       {/* ===== Top bar (mobile) ===== */}
       <header className="topbar">
-        <div style={{ fontWeight: 800, fontSize: 16 }}>Central de Comando</div>
+        <div style={{ fontWeight: 800, fontSize: 17, fontFamily: "var(--font-display)" }}>GAAB<span style={{ color: "var(--brand)" }}>TUR</span></div>
         <Link href="/painel/perfil" aria-label="Perfil" style={{ display: "flex" }}>
           <Avatar url={avatarUrl} size={32} />
         </Link>
