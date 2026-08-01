@@ -158,7 +158,7 @@ export default function SitePage() {
           </div>
           <div className="g-services">
             {servicos.map((s, i) => (
-              <Reveal key={s.t} delay={i * 50}>
+              <Reveal key={s.t} delay={i * 60} from={i % 2 === 0 ? "left" : "right"}>
                 <div className="g-svc">
                   <div className="g-ic"><SvcIcon name={s.ic} /></div>
                   <h3>{s.t}</h3>
