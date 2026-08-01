@@ -120,9 +120,9 @@ export default function SitePage() {
               </a>
             </div>
             <div className="g-trust">
-              <span><span className="dot" /> Compra segura</span>
-              <span><span className="dot" /> Suporte completo</span>
-              <span><span className="dot" /> 9 anos de experiência</span>
+              <span><span className="g-trust-ic"><SvcIcon name="shieldcheck" /></span> Compra segura</span>
+              <span><span className="g-trust-ic"><SvcIcon name="headset" /></span> Suporte completo</span>
+              <span><span className="g-trust-ic"><SvcIcon name="plane" /></span> 9 anos de experiência</span>
             </div>
           </div>
         </div>
