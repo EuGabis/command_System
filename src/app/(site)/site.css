@@ -149,6 +149,7 @@
 .g-videos { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 340px)); gap: 26px; justify-content: center; }
 .g-video { margin: 0; }
 .g-video video { width: 100%; height: auto; max-height: 620px; border-radius: 16px; background: #000; display: block; box-shadow: 0 20px 44px rgba(0,0,0,.4); }
+@media (max-width: 560px) { .g-video { max-width: 300px; margin: 0 auto; } .g-video video { max-height: 68vh; } }
 .g-video figcaption { margin-top: 14px; text-align: center; font-weight: 700; color: #fff; font-family: var(--font-display); }
 .g-video figcaption span { display: block; font-weight: 400; font-size: 13px; color: var(--muted-d); margin-top: 3px; }
 
