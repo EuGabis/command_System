@@ -87,7 +87,7 @@ export default function SitePage() {
           </nav>
           <div className="g-nav-right">
             <a className="g-btn g-btn-primary g-btn-sm" href={waLink} target="_blank" rel="noopener">
-              <WhatsIcon /> <span className="g-btn-label">Solicitar </span>orçamento
+              <WhatsIcon /> <span><span className="g-btn-label">Solicitar </span>orçamento</span>
             </a>
             <details className="g-menu">
               <summary aria-label="Menu">
@@ -116,7 +116,7 @@ export default function SitePage() {
             </p>
             <div className="g-hero-cta">
               <a className="g-btn g-btn-primary g-btn-lg g-hero-btn" href={waLink} target="_blank" rel="noopener">
-                <WhatsIcon /> Solicitar orçamento<span className="g-btn-extra">&nbsp;pelo WhatsApp</span>
+                <WhatsIcon /> <span>Solicitar orçamento<span className="g-btn-extra"> pelo WhatsApp</span></span>
               </a>
             </div>
             <div className="g-trust">
