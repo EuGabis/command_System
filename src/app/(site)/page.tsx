@@ -1,6 +1,7 @@
 import OrcamentoForm from "@/components/site/OrcamentoForm";
 import Reveal from "@/components/site/Reveal";
 import { Ico, WhatsIcon } from "@/components/site/icons";
+import MobileMenu from "@/components/site/MobileMenu";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUsers, faTicket, faGlobe, faPaw, faPlane, faHotel, faShip, faPassport, faHeadset,
@@ -89,18 +90,7 @@ export default function SitePage() {
             <a className="g-btn g-btn-primary g-btn-sm" href={waLink} target="_blank" rel="noopener">
               <WhatsIcon /> <span><span className="g-btn-label">Solicitar </span>orçamento</span>
             </a>
-            <details className="g-menu">
-              <summary aria-label="Menu">
-                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M3 6h18M3 12h18M3 18h18" /></svg>
-              </summary>
-              <div className="g-menu-panel">
-                <a href="#top">Início</a>
-                <a href="#servicos">Serviços</a>
-                <a href="#depoimentos">Depoimentos</a>
-                <a href="#orcamento">Orçamento</a>
-                <a href="#contato">Contato</a>
-              </div>
-            </details>
+            <MobileMenu />
           </div>
         </div>
       </header>
