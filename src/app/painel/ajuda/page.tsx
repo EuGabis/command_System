@@ -233,7 +233,7 @@ export default function AjudaPage() {
         <div style={{ fontSize: 14, color: "var(--muted)", flex: 1, minWidth: 200 }}>
           Precisa de mais alguma coisa? Comece pelo <strong style={{ color: "var(--text)" }}>Painel</strong> e siga o checklist de configuração.
         </div>
-        <Link href="/" className="btn secondary">Ir para o painel <Icon name="arrow" size={15} /></Link>
+        <Link href="/painel" className="btn secondary">Ir para o painel <Icon name="arrow" size={15} /></Link>
       </div>
     </div>
   );

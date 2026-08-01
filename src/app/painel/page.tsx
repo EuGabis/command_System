@@ -114,7 +114,7 @@ function ChannelCard({
           Abrir canal
           <Icon name="arrow" size={15} />
         </Link>
-        <Link href={`/conversas?platform=${platform}`} className="btn secondary">
+        <Link href={`/painel/conversas?platform=${platform}`} className="btn secondary">
           Ver conversas
         </Link>
       </div>

@@ -6,23 +6,23 @@ import LogoutButton from "./LogoutButton";
 import Icon, { type IconName } from "./Icon";
 
 const nav: { href: string; label: string; icon: IconName }[] = [
-  { href: "/", label: "Dashboard", icon: "dashboard" },
-  { href: "/whatsapp", label: "WhatsApp", icon: "whatsapp" },
-  { href: "/instagram", label: "Instagram", icon: "instagram" },
-  { href: "/ia", label: "IA", icon: "ai" },
-  { href: "/conversas", label: "Conversas", icon: "chat" },
-  { href: "/pipeline", label: "Pipeline", icon: "pipeline" },
+  { href: "/painel", label: "Dashboard", icon: "dashboard" },
+  { href: "/painel/whatsapp", label: "WhatsApp", icon: "whatsapp" },
+  { href: "/painel/instagram", label: "Instagram", icon: "instagram" },
+  { href: "/painel/ia", label: "IA", icon: "ai" },
+  { href: "/painel/conversas", label: "Conversas", icon: "chat" },
+  { href: "/painel/pipeline", label: "Pipeline", icon: "pipeline" },
 ];
 
 // Item extra só no menu lateral (no mobile fica acessível pelo avatar da top bar)
 const perfilItem: { href: string; label: string; icon: IconName } = {
-  href: "/perfil",
+  href: "/painel/perfil",
   label: "Perfil",
   icon: "user",
 };
 
 function isActive(pathname: string, href: string) {
-  return href === "/" ? pathname === "/" : pathname.startsWith(href);
+  return href === "/painel" ? pathname === "/painel" : pathname.startsWith(href);
 }
 
 function Avatar({ url, size = 34 }: { url: string | null; size?: number }) {
@@ -104,7 +104,7 @@ export default function AppShell({
       {/* ===== Top bar (mobile) ===== */}
       <header className="topbar">
         <div style={{ fontWeight: 800, fontSize: 16 }}>Central de Comando</div>
-        <Link href="/perfil" aria-label="Perfil" style={{ display: "flex" }}>
+        <Link href="/painel/perfil" aria-label="Perfil" style={{ display: "flex" }}>
           <Avatar url={avatarUrl} size={32} />
         </Link>
       </header>
@@ -120,7 +120,7 @@ export default function AppShell({
             <span>{n.label}</span>
           </Link>
         ))}
-        <Link href="/perfil" className={`tab${isActive(pathname, "/perfil") ? " active" : ""}`}>
+        <Link href="/painel/perfil" className={`tab${isActive(pathname, "/painel/perfil") ? " active" : ""}`}>
           <span className="ico"><Icon name="user" size={21} /></span>
           <span>Perfil</span>
         </Link>
@@ -128,10 +128,10 @@ export default function AppShell({
 
       {/* ===== Botão flutuante de Ajuda ===== */}
       <Link
-        href="/ajuda"
+        href="/painel/ajuda"
         aria-label="Central de Ajuda"
         title="Ajuda"
-        className={`help-fab${pathname.startsWith("/ajuda") ? " active" : ""}`}
+        className={`help-fab${pathname.startsWith("/painel/ajuda") ? " active" : ""}`}
       >
         <Icon name="help" size={24} />
       </Link>

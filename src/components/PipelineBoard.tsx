@@ -27,7 +27,7 @@ function LeadCard({
   const datas = [d.data_ida, d.data_volta].filter(Boolean).join(" - ");
   return (
     <a
-      href={`/conversas?id=${c.id}`}
+      href={`/painel/conversas?id=${c.id}`}
       className={`lead-card${dragging ? " dragging" : ""}`}
       draggable
       onDragStart={() => onDragStart(c.id)}
