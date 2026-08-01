@@ -33,7 +33,7 @@ function Avatar({ url, size = 34 }: { url: string | null; size?: number }) {
       <img
         src={url}
         alt="avatar"
-        style={{ width: size, height: size, borderRadius: "50%", objectFit: "cover" }}
+        style={{ width: size, height: size, flex: "none", borderRadius: "50%", objectFit: "cover" }}
       />
     );
   }
@@ -42,6 +42,7 @@ function Avatar({ url, size = 34 }: { url: string | null; size?: number }) {
       style={{
         width: size,
         height: size,
+        flex: "none",
         borderRadius: "50%",
         background: "var(--panel-2)",
         border: "1px solid var(--border)",
