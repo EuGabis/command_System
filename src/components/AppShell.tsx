@@ -73,9 +73,6 @@ export default function AppShell({
         <div className="brand">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <span className="brand-logo"><img src="/logo.png" alt="GAABTUR" /></span>
-          <span className="brand-text">
-            <span className="brand-sub">Central de Comando</span>
-          </span>
         </div>
 
         <nav style={{ display: "flex", flexDirection: "column", gap: 4, flex: 1 }}>
