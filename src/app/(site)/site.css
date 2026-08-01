@@ -82,8 +82,8 @@
   .g-hero-left { padding: 48px 0; }
 }
 
-/* Logo (imagem real) */
-.g-logo-img { width: auto; display: block; border-radius: 8px; background: #fff; padding: 5px 9px; }
+/* Logo (imagem real, recortada) */
+.g-logo-img { width: auto; display: block; border-radius: 8px; background: #fff; padding: 6px 12px; box-shadow: 0 2px 10px rgba(0,0,0,.25); }
 
 /* ===== Seções ===== */
 .g-section { padding: 88px 0; }

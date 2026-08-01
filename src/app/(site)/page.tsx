@@ -35,10 +35,10 @@ const depoimentos = [
   { txt: "Suporte incrível! Tive assistência em todo momento. Já vou fechar a próxima viagem com eles.", nome: "Fernanda L.", cidade: "Rio de Janeiro · RJ", img: "https://i.pravatar.cc/80?img=32" },
 ];
 
-function Logo({ height = 46 }: { height?: number }) {
+function Logo({ height = 40 }: { height?: number }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
-    <img src="/logo.jpeg" alt="GAABTUR — Viagens e Turismo" className="g-logo-img" style={{ height }} />
+    <img src="/logo.png" alt="GAABTUR — Viagens e Turismo" className="g-logo-img" style={{ height }} />
   );
 }
 
