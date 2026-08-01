@@ -116,6 +116,13 @@
 .g-svc h3 { font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; color: var(--ink); }
 .g-svc p { color: var(--muted); font-size: 13.5px; margin-top: 8px; line-height: 1.55; }
 
+/* Depoimentos em vídeo */
+.g-videos { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 340px)); gap: 26px; justify-content: center; }
+.g-video { margin: 0; }
+.g-video video { width: 100%; height: auto; max-height: 620px; border-radius: 16px; background: #000; display: block; box-shadow: 0 20px 44px rgba(0,0,0,.4); }
+.g-video figcaption { margin-top: 14px; text-align: center; font-weight: 700; color: #fff; font-family: var(--font-display); }
+.g-video figcaption span { display: block; font-weight: 400; font-size: 13px; color: var(--muted-d); margin-top: 3px; }
+
 /* Depoimentos */
 .g-testis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
 @media (max-width: 900px) { .g-testis { grid-template-columns: 1fr; } }
