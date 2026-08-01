@@ -167,6 +167,15 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 700; letter-spacing:
 .brand-logo { flex: none; display: inline-flex; background: #fff; border-radius: 8px; padding: 5px 9px; }
 .brand-logo img { height: 26px; width: auto; display: block; }
 
+/* Rail recolhida: só o símbolo (quadrado). Expandida: logo cheia. */
+.brand-mark-chip { padding: 4px; }
+.brand-mark-chip img { width: 30px; height: 30px; object-fit: cover; border-radius: 5px; }
+.brand-full-chip { display: none; }
+.sidebar:hover .brand-mark-chip,
+.sidebar:focus-within .brand-mark-chip { display: none; }
+.sidebar:hover .brand-full-chip,
+.sidebar:focus-within .brand-full-chip { display: inline-flex; }
+
 /* ===== Dashboard ===== */
 .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 22px; }
 @media (max-width: 900px) { .kpi-grid { grid-template-columns: 1fr 1fr; } }
