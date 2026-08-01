@@ -1,7 +1,21 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { Conversation, Message, Platform } from "@/lib/types";
+import type { Conversation, Message, Platform, QuickReply } from "@/lib/types";
+
+function MediaView({ m }: { m: Message }) {
+  if (!m.media_url) return null;
+  if (m.media_type === "image")
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img src={m.media_url} alt="imagem" className="msg-media" />;
+  if (m.media_type === "video") return <video src={m.media_url} controls className="msg-media" />;
+  if (m.media_type === "audio") return <audio src={m.media_url} controls style={{ width: 230, maxWidth: "100%" }} />;
+  return (
+    <a href={m.media_url} target="_blank" rel="noopener" className="msg-doc">
+      📄 {m.media_name ?? "Documento"}
+    </a>
+  );
+}
 
 type Tab = "abertas" | "pendentes" | "resolvidas" | "todas";
 type PlatFilter = "todos" | Platform;
@@ -104,8 +118,12 @@ export default function ConversasInbox({ initial }: { initial: Conversation[] })
   const [busca, setBusca] = useState("");
   const [texto, setTexto] = useState("");
   const [enviando, setEnviando] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [quick, setQuick] = useState<QuickReply[]>([]);
+  const [showQuick, setShowQuick] = useState(false);
   const [mobileView, setMobileView] = useState<"list" | "chat">("list");
   const scrollRef = useRef<HTMLDivElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
   const lastCountRef = useRef(0);
 
   const carregarLista = useCallback(async () => {
@@ -138,6 +156,14 @@ export default function ConversasInbox({ initial }: { initial: Conversation[] })
       setSelectedId(id);
       setMobileView("chat");
     }
+  }, []);
+
+  // respostas rápidas (carrega uma vez)
+  useEffect(() => {
+    fetch("/api/respostas", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((d) => { if (Array.isArray(d.respostas)) setQuick(d.respostas); })
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -216,6 +242,32 @@ export default function ConversasInbox({ initial }: { initial: Conversation[] })
     } finally {
       setEnviando(false);
     }
+  }
+
+  async function enviarArquivo(file: File) {
+    if (!selectedId || uploading) return;
+    setUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      if (texto.trim()) fd.append("caption", texto.trim());
+      const res = await fetch(`/api/conversas/${selectedId}/media`, { method: "POST", body: fd });
+      const data = await res.json();
+      if (res.ok && data.ok) {
+        setTexto("");
+        await carregarDetalhe(selectedId);
+      } else {
+        alert(data.error ?? "Falha ao enviar o arquivo");
+      }
+    } finally {
+      setUploading(false);
+      if (fileRef.current) fileRef.current.value = "";
+    }
+  }
+
+  function usarResposta(r: QuickReply) {
+    setTexto((t) => (t.trim() ? `${t} ${r.texto}` : r.texto));
+    setShowQuick(false);
   }
 
   const resolvida = conversa?.status === "fechada";
@@ -362,7 +414,8 @@ export default function ConversasInbox({ initial }: { initial: Conversation[] })
                     )}
                     <div className={`msg-row${m.direcao === "entrada" ? "" : " right"}`}>
                       <div className={`bubble ${cls}`}>
-                        <MensagemTexto texto={m.conteudo} />
+                        <MediaView m={m} />
+                        {m.conteudo?.trim() && <MensagemTexto texto={m.conteudo} />}
                         <div className="meta">
                           {m.autor === "ia" ? "IA" : m.autor === "humano" ? "Você" : "Cliente"} · {horaCurta(m.created_at)}
                         </div>
@@ -373,7 +426,32 @@ export default function ConversasInbox({ initial }: { initial: Conversation[] })
               })}
             </div>
 
-            <div style={{ display: "flex", gap: 8, padding: 12, borderTop: "1px solid var(--border)", background: "var(--panel)" }}>
+            <div style={{ display: "flex", gap: 8, padding: 12, borderTop: "1px solid var(--border)", background: "var(--panel)", position: "relative" }}>
+              <input
+                ref={fileRef}
+                type="file"
+                accept="image/*,audio/*,video/*,application/pdf"
+                style={{ display: "none" }}
+                onChange={(e) => { const f = e.target.files?.[0]; if (f) enviarArquivo(f); }}
+              />
+              <button className="composer-btn" title="Anexar arquivo" onClick={() => fileRef.current?.click()} disabled={uploading}>
+                {uploading ? "…" : "📎"}
+              </button>
+              {quick.length > 0 && (
+                <button className="composer-btn" title="Respostas rápidas" onClick={() => setShowQuick((v) => !v)}>⚡</button>
+              )}
+
+              {showQuick && (
+                <div className="quick-panel">
+                  {quick.map((r) => (
+                    <button key={r.id} className="quick-item" onClick={() => usarResposta(r)}>
+                      <strong>{r.titulo}</strong>
+                      <span>{r.texto}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+
               <input
                 className="input"
                 placeholder="Digite uma mensagem…"

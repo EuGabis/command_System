@@ -136,3 +136,50 @@ export async function evolutionSendText(instance: string, to: string, text: stri
     text,
   });
 }
+
+/* ---------- Mídia ---------- */
+
+// Baixa o conteúdo (base64) de uma mensagem de mídia recebida.
+export async function evolutionGetBase64(
+  instance: string,
+  message: unknown,
+): Promise<{ base64: string; mimetype: string } | null> {
+  try {
+    const data = await call<{ base64?: string; mimetype?: string }>(
+      "POST",
+      `/chat/getBase64FromMediaMessage/${encodeURIComponent(instance)}`,
+      { message, convertToMp4: false },
+    );
+    if (!data?.base64) return null;
+    return { base64: data.base64, mimetype: data.mimetype ?? "application/octet-stream" };
+  } catch (e) {
+    console.error("Evolution getBase64 falhou:", e);
+    return null;
+  }
+}
+
+// Envia imagem/vídeo/documento a partir de uma URL pública.
+export async function evolutionSendMedia(
+  instance: string,
+  to: string,
+  mediatype: "image" | "video" | "document",
+  url: string,
+  fileName?: string,
+  caption?: string,
+): Promise<void> {
+  await call("POST", `/message/sendMedia/${encodeURIComponent(instance)}`, {
+    number: to,
+    mediatype,
+    media: url,
+    fileName: fileName ?? "arquivo",
+    caption: caption ?? "",
+  });
+}
+
+// Envia áudio (nota de voz) a partir de uma URL pública.
+export async function evolutionSendAudio(instance: string, to: string, url: string): Promise<void> {
+  await call("POST", `/message/sendWhatsAppAudio/${encodeURIComponent(instance)}`, {
+    number: to,
+    audio: url,
+  });
+}

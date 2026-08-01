@@ -1,4 +1,4 @@
-import OpenAI from "openai";
+import OpenAI, { toFile } from "openai";
 import type { AiConfig, Message, LeadData, PipelineStage } from "./types";
 
 export function isOpenAIConfigured(): boolean {
@@ -35,6 +35,9 @@ export async function gerarResposta(
     cfg.regras_escalonamento
       ? `Regras de escalonamento para humano:\n${cfg.regras_escalonamento}`
       : "",
+    "Se precisar transferir para um atendente humano (pelas regras acima ou se o cliente pedir), " +
+      "responda com uma frase curta avisando que vai transferir e inclua o marcador [[HANDOFF]] ao final. " +
+      "Não use esse marcador em nenhuma outra situação.",
     "Responda sempre em português do Brasil, de forma objetiva e útil.",
   ]
     .filter(Boolean)
@@ -60,6 +63,21 @@ export async function gerarResposta(
     completion.choices[0]?.message?.content?.trim() ||
     "Desculpe, não consegui gerar uma resposta agora."
   );
+}
+
+// Transcreve um áudio (base64) para texto, para a IA entender notas de voz.
+export async function transcreverAudio(base64: string, mime: string): Promise<string | null> {
+  if (!isOpenAIConfigured()) return null;
+  try {
+    const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    const ext = (mime.split("/")[1] || "ogg").split(";")[0];
+    const file = await toFile(Buffer.from(base64, "base64"), `audio.${ext}`, { type: mime });
+    const res = await client.audio.transcriptions.create({ file, model: "whisper-1" });
+    return res.text?.trim() || null;
+  } catch (e) {
+    console.error("Falha ao transcrever áudio:", e);
+    return null;
+  }
 }
 
 const STAGES: PipelineStage[] = [

@@ -9,6 +9,7 @@ import type {
   Message,
   PipelineStage,
   LeadData,
+  QuickReply,
 } from "./types";
 
 export { isSupabaseConfigured };
@@ -248,23 +249,59 @@ export async function upsertConversation(
   return data!.id as string;
 }
 
+export interface MediaInfo {
+  url: string;
+  type: "image" | "audio" | "video" | "document";
+  name?: string | null;
+}
+
 export async function addMessage(
   conversationId: string,
   direcao: "entrada" | "saida",
   conteudo: string,
   autor: string,
+  media?: MediaInfo,
 ): Promise<void> {
   const { error } = await supabaseAdmin().from("messages").insert({
     conversation_id: conversationId,
     direcao,
     conteudo,
     autor,
+    media_url: media?.url ?? null,
+    media_type: media?.type ?? null,
+    media_name: media?.name ?? null,
   });
   if (error) throw new Error(error.message);
   await supabaseAdmin()
     .from("conversations")
     .update({ updated_at: new Date().toISOString() })
     .eq("id", conversationId);
+}
+
+/* ---------- Respostas rápidas ---------- */
+
+export async function listQuickReplies(): Promise<QuickReply[]> {
+  if (!isSupabaseConfigured()) return [];
+  const { data } = await supabaseAdmin()
+    .from("quick_replies")
+    .select("*")
+    .order("created_at", { ascending: true });
+  return (data as QuickReply[]) ?? [];
+}
+
+export async function createQuickReply(titulo: string, texto: string): Promise<QuickReply> {
+  const { data, error } = await supabaseAdmin()
+    .from("quick_replies")
+    .insert({ titulo, texto })
+    .select("*")
+    .single();
+  if (error) throw new Error(error.message);
+  return data as QuickReply;
+}
+
+export async function deleteQuickReply(id: string): Promise<void> {
+  const { error } = await supabaseAdmin().from("quick_replies").delete().eq("id", id);
+  if (error) throw new Error(error.message);
 }
 
 export interface PlatformStats {

@@ -463,6 +463,30 @@ main.content:has(.inbox) { max-width: none; padding: 0; }
 .bubble .meta { font-size: 10.5px; opacity: .65; margin-top: 3px; text-align: right; }
 .bubble.in .meta { text-align: left; }
 
+/* Mídia nas mensagens */
+.msg-media { max-width: 260px; max-height: 320px; width: 100%; border-radius: 10px; display: block; margin-bottom: 6px; background: #000; object-fit: cover; }
+.msg-doc { display: inline-flex; align-items: center; gap: 8px; color: inherit; text-decoration: underline; font-size: 14px; }
+
+/* Composer: anexar / respostas rápidas */
+.composer-btn {
+  flex: none; width: 42px; border: 1px solid var(--border); background: var(--panel-2);
+  color: var(--text); border-radius: var(--r-ctrl); cursor: pointer; font-size: 16px;
+}
+.composer-btn:hover { border-color: var(--brand); }
+.composer-btn:disabled { opacity: .5; cursor: default; }
+.quick-panel {
+  position: absolute; bottom: 62px; left: 12px; width: min(360px, calc(100% - 24px));
+  max-height: 300px; overflow-y: auto; background: var(--panel); border: 1px solid var(--border-strong);
+  border-radius: 12px; box-shadow: 0 20px 44px rgba(0,0,0,.5); z-index: 40; padding: 6px;
+}
+.quick-item {
+  display: flex; flex-direction: column; gap: 3px; width: 100%; text-align: left;
+  background: transparent; border: none; cursor: pointer; padding: 10px 12px; border-radius: 8px; color: var(--text);
+}
+.quick-item:hover { background: var(--panel-2); }
+.quick-item strong { font-size: 13.5px; }
+.quick-item span { font-size: 12.5px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
 /* ===== Pipeline (Kanban) ===== */
 /* usa toda a largura da tela (sem o max-width do .content), mantendo o padding do cabeçalho */
 main.content:has(.kanban) { max-width: none; }
