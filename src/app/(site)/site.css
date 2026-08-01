@@ -95,7 +95,8 @@
 .g-hero p { color: rgba(255,255,255,.9); font-size: 17px; margin-top: 22px; max-width: 46ch; line-height: 1.7; text-shadow: 0 1px 10px rgba(0,0,0,.4); }
 .g-hero-cta { margin-top: 32px; }
 @media (max-width: 560px) {
-  .g-hero-cta .g-btn { width: 100%; justify-content: center; text-align: center; }
+  .g-hero-cta .g-btn { width: 100%; justify-content: center; text-align: center; white-space: nowrap; }
+  .g-btn-extra { display: none; } /* mobile: só "Solicitar orçamento" (ícone já indica WhatsApp) */
 }
 .g-trust { display: flex; flex-wrap: wrap; gap: 22px; margin-top: 34px; }
 .g-trust span { display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; color: rgba(255,255,255,.9); }

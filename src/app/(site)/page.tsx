@@ -115,8 +115,8 @@ export default function SitePage() {
               e muito mais, com atendimento humanizado do início ao fim da sua viagem.
             </p>
             <div className="g-hero-cta">
-              <a className="g-btn g-btn-primary g-btn-lg" href={waLink} target="_blank" rel="noopener">
-                <WhatsIcon /> Solicitar orçamento pelo WhatsApp
+              <a className="g-btn g-btn-primary g-btn-lg g-hero-btn" href={waLink} target="_blank" rel="noopener">
+                <WhatsIcon /> Solicitar orçamento<span className="g-btn-extra">&nbsp;pelo WhatsApp</span>
               </a>
             </div>
             <div className="g-trust">
