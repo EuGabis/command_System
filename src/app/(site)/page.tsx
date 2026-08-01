@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 const WHATS = "5585984500465";
 const waLink = `https://wa.me/${WHATS}?text=${encodeURIComponent("Olá! Gostaria de solicitar um orçamento de viagem.")}`;
 
-const HERO_IMG = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1100&q=80";
+const HERO_IMG = "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=1300&q=80";
 const CTA_IMG = "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1600&q=80";
 
 const porque = [
@@ -73,27 +73,25 @@ export default function SitePage() {
 
       {/* Hero */}
       <section className="g-hero">
-        <div className="g-container">
-          <div className="g-hero-grid">
-            <div className="g-hero-left">
-              <h1>Sua próxima viagem começa com a <span className="orange">GAABTUR.</span></h1>
-              <p>
-                Aqui você encontra as melhores opções em passagens, hotéis, seguro viagem, passaporte
-                e muito mais, com atendimento humanizado do início ao fim da sua viagem.
-              </p>
-              <div className="g-hero-cta">
-                <a className="g-btn g-btn-primary g-btn-lg" href={waLink} target="_blank" rel="noopener">
-                  <WhatsIcon /> Solicitar orçamento pelo WhatsApp
-                </a>
-              </div>
-              <div className="g-trust">
-                <span><span className="dot" /> Compra segura</span>
-                <span><span className="dot" /> Suporte completo</span>
-                <span><span className="dot" /> 9 anos de experiência</span>
-              </div>
+        <div className="g-hero-grid">
+          <div className="g-hero-left">
+            <h1>Sua próxima viagem começa com a <span className="orange">GAABTUR.</span></h1>
+            <p>
+              Aqui você encontra as melhores opções em passagens, hotéis, seguro viagem, passaporte
+              e muito mais, com atendimento humanizado do início ao fim da sua viagem.
+            </p>
+            <div className="g-hero-cta">
+              <a className="g-btn g-btn-primary g-btn-lg" href={waLink} target="_blank" rel="noopener">
+                <WhatsIcon /> Solicitar orçamento pelo WhatsApp
+              </a>
             </div>
-            <div className="g-hero-photo" style={{ backgroundImage: `url(${HERO_IMG})` }} />
+            <div className="g-trust">
+              <span><span className="dot" /> Compra segura</span>
+              <span><span className="dot" /> Suporte completo</span>
+              <span><span className="dot" /> 9 anos de experiência</span>
+            </div>
           </div>
+          <div className="g-hero-photo" style={{ backgroundImage: `url(${HERO_IMG})` }} />
         </div>
       </section>
 
