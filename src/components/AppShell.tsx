@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import LogoutButton from "./LogoutButton";
@@ -67,6 +68,9 @@ export default function AppShell({
 }) {
   const pathname = usePathname();
   const allNav = [...nav, perfilItem];
+  const [moreOpen, setMoreOpen] = useState(false);
+  // Barra inferior enxuta: principais + "Mais"
+  const primaryMobile = [nav[0], nav[4], nav[5]]; // Dashboard, Conversas, Pipeline
 
   return (
     <div className="shell">
@@ -114,18 +118,40 @@ export default function AppShell({
       {/* ===== Conteúdo ===== */}
       <main className="content">{children}</main>
 
+      {/* ===== Folha "Mais" (mobile) ===== */}
+      {moreOpen && (
+        <>
+          <div className="sheet-overlay" onClick={() => setMoreOpen(false)} />
+          <div className="more-sheet">
+            {allNav.map((n) => (
+              <Link
+                key={n.href}
+                href={n.href}
+                className={`more-item${isActive(pathname, n.href) ? " active" : ""}`}
+                onClick={() => setMoreOpen(false)}
+              >
+                <span className="ico"><Icon name={n.icon} size={22} /></span>
+                <span>{n.label === "IA" ? "Config. IA" : n.label}</span>
+              </Link>
+            ))}
+          </div>
+        </>
+      )}
+
       {/* ===== Bottom nav (mobile) ===== */}
       <nav className="bottomnav">
-        {nav.map((n) => (
-          <Link key={n.href} href={n.href} className={`tab${isActive(pathname, n.href) ? " active" : ""}`}>
-            <span className="ico"><Icon name={n.icon} size={21} /></span>
+        {primaryMobile.map((n) => (
+          <Link key={n.href} href={n.href} className={`tab${isActive(pathname, n.href) ? " active" : ""}`} onClick={() => setMoreOpen(false)}>
+            <span className="ico"><Icon name={n.icon} size={22} /></span>
             <span>{n.label}</span>
           </Link>
         ))}
-        <Link href="/painel/perfil" className={`tab${isActive(pathname, "/painel/perfil") ? " active" : ""}`}>
-          <span className="ico"><Icon name="user" size={21} /></span>
-          <span>Perfil</span>
-        </Link>
+        <button type="button" className={`tab${moreOpen ? " active" : ""}`} onClick={() => setMoreOpen((v) => !v)}>
+          <span className="ico">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden><circle cx="5" cy="12" r="2" /><circle cx="12" cy="12" r="2" /><circle cx="19" cy="12" r="2" /></svg>
+          </span>
+          <span>Mais</span>
+        </button>
       </nav>
 
       {/* ===== Botão flutuante de Ajuda ===== */}
