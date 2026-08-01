@@ -98,8 +98,9 @@
   .g-hero-cta .g-btn { width: 100%; justify-content: center; text-align: center; }
 }
 .g-trust { display: flex; flex-wrap: wrap; gap: 22px; margin-top: 34px; }
-.g-trust span { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: rgba(255,255,255,.85); }
-.g-trust .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--orange); }
+.g-trust span { display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; color: rgba(255,255,255,.9); }
+.g-trust .g-trust-ic { display: inline-flex; align-items: center; justify-content: center; color: var(--orange); }
+.g-trust .g-trust-ic svg { height: 17px; width: auto; }
 @media (max-width: 900px) {
   .g-hero { min-height: 78vh; }
   .g-hero::before { background: linear-gradient(0deg, rgba(16,16,18,.95) 5%, rgba(16,16,18,.55) 55%, rgba(16,16,18,.35)); }
