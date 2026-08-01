@@ -29,6 +29,10 @@ const servicos = [
   { ic: "headset", t: "Atendimento 100% online", d: "Converse com a nossa equipe pelo WhatsApp onde estiver." },
 ];
 
+const videos = [
+  { src: "/depoimento-edilene.mp4", nome: "Edilene Cavalcante", legenda: "Cliente GAABTUR" },
+];
+
 const depoimentos = [
   { txt: "Atendimento excelente! A GAABTUR cuidou de tudo da minha viagem para a Europa. Super indico!", nome: "Juliana M.", cidade: "Fortaleza · CE", img: "https://i.pravatar.cc/80?img=45" },
   { txt: "Empresa séria, confiável e com preços justos. Me senti segura da ida ao fim da minha viagem.", nome: "Carlos A.", cidade: "São Paulo · SP", img: "https://i.pravatar.cc/80?img=12" },
@@ -122,6 +126,27 @@ export default function SitePage() {
                   <p>{s.d}</p>
                 </div>
               </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Depoimentos em vídeo */}
+      <section className="g-section ink">
+        <div className="g-container">
+          <div className="g-section-head">
+            <h2>Depoimentos em <span className="orange">vídeo</span></h2>
+            <p>Veja quem já viajou com a gente contando como foi a experiência.</p>
+          </div>
+          <div className="g-videos">
+            {videos.map((v) => (
+              <figure className="g-video" key={v.src}>
+                <video controls preload="metadata" playsInline>
+                  <source src={v.src} type="video/mp4" />
+                  Seu navegador não suporta vídeo.
+                </video>
+                <figcaption>{v.nome}<span>{v.legenda}</span></figcaption>
+              </figure>
             ))}
           </div>
         </div>
