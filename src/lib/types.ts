@@ -87,11 +87,23 @@ export interface Conversation {
   updated_at: string;
 }
 
+export type MediaType = "image" | "audio" | "video" | "document";
+
 export interface Message {
   id: string;
   conversation_id: string;
   direcao: "entrada" | "saida";
   conteudo: string;
   autor: string;
+  media_url?: string | null;
+  media_type?: MediaType | null;
+  media_name?: string | null;
   created_at: string;
+}
+
+export interface QuickReply {
+  id: string;
+  titulo: string;
+  texto: string;
+  created_at?: string;
 }

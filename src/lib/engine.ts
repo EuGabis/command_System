@@ -8,11 +8,16 @@ import {
   getConversationById,
   saveLead,
   ultimaEntradaId,
+  setConversationIa,
+  setConversationStatus,
+  type MediaInfo,
 } from "./repo";
 import { gerarResposta, extrairLead } from "./ai";
 import { whatsappSendText, instagramSendText } from "./meta";
 import {
   evolutionSendText,
+  evolutionSendMedia,
+  evolutionSendAudio,
   isEvolutionConfigured as evolutionConfigured,
   defaultInstance,
 } from "./evolution";
@@ -55,6 +60,31 @@ export async function enviarMensagemManual(
   await addMessage(conversationId, "saida", texto, "humano");
 }
 
+async function resolverInstanciaWhatsApp(): Promise<string> {
+  const creds = await getCredentials<WhatsAppCredentials & Partial<EvolutionCredentials>>("whatsapp");
+  if (creds?.provider === "evolution" && creds.instanceName) return creds.instanceName;
+  if (evolutionConfigured()) return defaultInstance();
+  throw new Error("Evolution não configurada para envio de mídia.");
+}
+
+// Envia um anexo (já hospedado) para o contato e registra a saída.
+export async function enviarMidiaManual(
+  conversationId: string,
+  platform: Platform,
+  contato: string,
+  media: MediaInfo,
+  caption?: string,
+): Promise<void> {
+  if (platform !== "whatsapp") throw new Error("Envio de mídia disponível apenas no WhatsApp.");
+  const inst = await resolverInstanciaWhatsApp();
+  if (media.type === "audio") {
+    await evolutionSendAudio(inst, contato, media.url);
+  } else {
+    await evolutionSendMedia(inst, contato, media.type, media.url, media.name ?? undefined, caption);
+  }
+  await addMessage(conversationId, "saida", caption ?? "", "humano", media);
+}
+
 // Janela de agrupamento de mensagens em rajada (ms). Ajustável por env.
 const DEBOUNCE_MS = Number(process.env.AI_DEBOUNCE_MS ?? 8000);
 
@@ -66,6 +96,27 @@ export interface OrigemMensagem {
   // Quando a mensagem chega pelo webhook da Evolution, sabemos que a resposta
   // deve voltar por essa mesma instância — independente da conexão salva.
   evolutionInstance?: string;
+  media?: MediaInfo;      // anexo recebido (imagem/áudio/etc)
+  aiText?: string;        // texto que a IA deve "ler" (ex: transcrição, ou placeholder de imagem)
+}
+
+// Avisa o dono no WhatsApp (se OWNER_WHATSAPP estiver definido). Best-effort.
+async function notificarDono(texto: string, instance?: string): Promise<void> {
+  const dono = (process.env.OWNER_WHATSAPP ?? "").replace(/\D/g, "");
+  if (!dono) return;
+  const inst = instance ?? (evolutionConfigured() ? defaultInstance() : null);
+  if (!inst) return;
+  try {
+    await evolutionSendText(inst, dono, texto);
+  } catch (e) {
+    console.error("Falha ao notificar o dono:", e);
+  }
+}
+
+// Detecta pedido de atendente humano (marcador da IA ou frase do cliente).
+function precisaHumano(clienteTexto: string, respostaIa: string): boolean {
+  if (/\[\[\s*handoff\s*\]\]/i.test(respostaIa)) return true;
+  return /(atendente|falar com (uma |um )?(pessoa|humano|atendente)|pessoa de verdade|quero um humano)/i.test(clienteTexto);
 }
 
 export async function processarMensagemRecebida(
@@ -76,7 +127,15 @@ export async function processarMensagemRecebida(
   origem?: OrigemMensagem,
 ): Promise<void> {
   const conversationId = await upsertConversation(platform, contato, nome);
-  await addMessage(conversationId, "entrada", texto, "cliente");
+  const primeiroContato = (await ultimaEntradaId(conversationId)) === null;
+  await addMessage(conversationId, "entrada", texto, "cliente", origem?.media);
+
+  // Novo lead chegou -> avisa o dono.
+  if (primeiroContato) {
+    await notificarDono(`🆕 Novo contato no ${platform === "whatsapp" ? "WhatsApp" : "Instagram"}: ${nome ?? contato}`, origem?.evolutionInstance);
+  }
+
+  const aiText = origem?.aiText ?? texto;
 
   const cfg = await getAiConfig(platform);
   const conv = await getConversationById(conversationId);
@@ -100,7 +159,11 @@ export async function processarMensagemRecebida(
   // O histórico já inclui a mensagem atual; remove a última pra não duplicar.
   const hist = await conversationHistory(conversationId, 30);
   const historico = hist.slice(0, -1);
-  const resposta = await gerarResposta(cfg, historico, texto, negocio);
+  let resposta = await gerarResposta(cfg, historico, aiText, negocio);
+
+  // Handoff: a IA (ou o cliente) pediu atendente humano.
+  const handoff = precisaHumano(aiText, resposta);
+  resposta = resposta.replace(/\[\[\s*handoff\s*\]\]/gi, "").trim();
 
   let enviado = false;
   try {
@@ -135,6 +198,13 @@ export async function processarMensagemRecebida(
   }
 
   await addMessage(conversationId, "saida", resposta, "ia");
+
+  // Ao escalar: desliga a IA nesta conversa, marca como humano e avisa o dono.
+  if (handoff) {
+    await setConversationIa(conversationId, false);
+    await setConversationStatus(conversationId, "humano");
+    await notificarDono(`🔔 Atendimento humano solicitado — ${nome ?? contato} (${platform})`, origem?.evolutionInstance);
+  }
 
   await atualizarPipeline(conversationId, conv?.stage_locked ?? false);
 }

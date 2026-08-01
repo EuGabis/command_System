@@ -10,6 +10,7 @@ const PROTECTED_PREFIXES = [
   "/api/connections",
   "/api/ai-config",
   "/api/whatsapp",
+  "/api/respostas",
 ];
 
 export async function proxy(request: NextRequest) {

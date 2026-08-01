@@ -12,6 +12,7 @@ const nav: { href: string; label: string; icon: IconName }[] = [
   { href: "/painel/ia", label: "IA", icon: "ai" },
   { href: "/painel/conversas", label: "Conversas", icon: "chat" },
   { href: "/painel/pipeline", label: "Pipeline", icon: "pipeline" },
+  { href: "/painel/respostas", label: "Respostas", icon: "book" },
 ];
 
 // Item extra só no menu lateral (no mobile fica acessível pelo avatar da top bar)

@@ -46,3 +46,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# imagens/vídeos brutos (usar versões otimizadas)
+/public/banner.png
+/public/Depoimento cliente Edilene Cavalcante .mp4
