@@ -70,11 +70,9 @@ export default function LoginPage() {
         <div className="login-scan" />
 
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <span className="login-mark">G</span>
-          <div>
-            <div className="eyebrow">Central de Comando</div>
-            <div style={{ fontWeight: 800, fontSize: 17, marginTop: 3, fontFamily: "var(--font-display)" }}>GAAB<span style={{ color: "var(--brand)" }}>TUR</span></div>
-          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <span className="brand-logo"><img src="/logo.png" alt="GAABTUR" /></span>
+          <div className="eyebrow">Central de Comando</div>
         </div>
 
         <div style={{ marginTop: "auto", marginBottom: "auto" }}>
@@ -110,8 +108,8 @@ export default function LoginPage() {
       <main className="login-panel">
         <div className="login-form">
           <div className="login-panel-brand">
-            <span className="login-mark" style={{ width: 40, height: 40, fontSize: 18 }}>G</span>
-            <strong style={{ fontSize: 16, fontFamily: "var(--font-display)" }}>GAAB<span style={{ color: "var(--brand)" }}>TUR</span></strong>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <span className="brand-logo"><img src="/logo.png" alt="GAABTUR" /></span>
           </div>
 
           <div className="eyebrow" style={{ marginBottom: 10 }}>

@@ -71,9 +71,9 @@ export default function AppShell({
       {/* ===== Sidebar (desktop) ===== */}
       <aside className="sidebar">
         <div className="brand">
-          <span className="brand-mark">G</span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <span className="brand-logo"><img src="/logo.png" alt="GAABTUR" /></span>
           <span className="brand-text">
-            <span className="brand-title">GAAB<span style={{ color: "var(--brand)" }}>TUR</span></span>
             <span className="brand-sub">Central de Comando</span>
           </span>
         </div>
@@ -103,7 +103,8 @@ export default function AppShell({
 
       {/* ===== Top bar (mobile) ===== */}
       <header className="topbar">
-        <div style={{ fontWeight: 800, fontSize: 17, fontFamily: "var(--font-display)" }}>GAAB<span style={{ color: "var(--brand)" }}>TUR</span></div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <span className="brand-logo"><img src="/logo.png" alt="GAABTUR" /></span>
         <Link href="/painel/perfil" aria-label="Perfil" style={{ display: "flex" }}>
           <Avatar url={avatarUrl} size={32} />
         </Link>
