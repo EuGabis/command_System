@@ -244,9 +244,13 @@ export default function SitePage() {
           <div className="g-footer-grid">
             <div>
               <Logo />
-              <p style={{ marginTop: 16, maxWidth: "34ch" }}>
-                Há 9 anos transformando sonhos em viagens inesquecíveis. Atendimento 100% online,
-                com confiança e segurança.
+              <p style={{ marginTop: 18, color: "#fff", fontWeight: 700, fontFamily: "var(--font-display)", fontSize: 16 }}>
+                Sua próxima viagem começa aqui.
+              </p>
+              <p style={{ marginTop: 8, maxWidth: "42ch" }}>
+                Há mais de 9 anos, a GAABTUR conecta pessoas aos melhores destinos, oferecendo
+                atendimento personalizado, preços competitivos e total segurança para você viajar
+                com tranquilidade.
               </p>
               <div className="g-socials">
                 <a href="https://instagram.com/gaabtur_oficial" target="_blank" rel="noopener" aria-label="Instagram"><Ico name="instagram" /></a>
