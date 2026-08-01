@@ -298,18 +298,12 @@ export default function ConversasInbox({ initial }: { initial: Conversation[] })
             onChange={(e) => setBusca(e.target.value)}
             style={{ marginBottom: 10 }}
           />
-          <div style={{ display: "flex", gap: 6 }}>
+          <div className="chip-scroll">
             {(["todos", "whatsapp", "instagram"] as PlatFilter[]).map((p) => (
               <button
                 key={p}
                 onClick={() => setPlat(p)}
-                className="badge"
-                style={{
-                  cursor: "pointer",
-                  border: "1px solid var(--border)",
-                  background: plat === p ? "var(--brand)" : "var(--panel-2)",
-                  color: plat === p ? "#fff" : "var(--text)",
-                }}
+                className={`chip${plat === p ? " active" : ""}`}
               >
                 {p === "todos" ? "Todos" : p === "whatsapp" ? "WhatsApp" : "Instagram"}
               </button>
