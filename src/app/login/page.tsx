@@ -72,7 +72,6 @@ export default function LoginPage() {
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <span className="brand-logo"><img src="/logo.png" alt="GAABTUR" /></span>
-          <div className="eyebrow">Central de Comando</div>
         </div>
 
         <div style={{ marginTop: "auto", marginBottom: "auto" }}>
