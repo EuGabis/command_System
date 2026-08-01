@@ -94,16 +94,6 @@
 .g-hero h1 { font-size: clamp(38px, 4.8vw, 62px); font-weight: 800; text-shadow: 0 2px 16px rgba(0,0,0,.4); }
 .g-hero p { color: rgba(255,255,255,.9); font-size: 17px; margin-top: 22px; max-width: 46ch; line-height: 1.7; text-shadow: 0 1px 10px rgba(0,0,0,.4); }
 .g-hero-cta { margin-top: 32px; }
-
-/* CTA WhatsApp com pulso (destaque) */
-@keyframes g-pulse {
-  0%   { box-shadow: 0 10px 24px rgba(242,135,30,.32), 0 0 0 0 rgba(242,135,30,.5); }
-  70%  { box-shadow: 0 10px 24px rgba(242,135,30,.32), 0 0 0 18px rgba(242,135,30,0); }
-  100% { box-shadow: 0 10px 24px rgba(242,135,30,.32), 0 0 0 0 rgba(242,135,30,0); }
-}
-.g-btn-pulse { animation: g-pulse 2.4s ease-out infinite; }
-.g-btn-pulse:hover { animation-play-state: paused; }
-@media (prefers-reduced-motion: reduce) { .g-btn-pulse { animation: none; } }
 @media (max-width: 560px) {
   .g-hero-cta .g-btn { width: 100%; justify-content: center; text-align: center; }
 }
