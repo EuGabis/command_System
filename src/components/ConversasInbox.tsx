@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Conversation, Message, Platform, QuickReply } from "@/lib/types";
+import AudioPlayer from "./AudioPlayer";
 
 function MediaView({ m }: { m: Message }) {
   if (!m.media_url) return null;
@@ -9,7 +10,7 @@ function MediaView({ m }: { m: Message }) {
     // eslint-disable-next-line @next/next/no-img-element
     return <img src={m.media_url} alt="imagem" className="msg-media" />;
   if (m.media_type === "video") return <video src={m.media_url} controls className="msg-media" />;
-  if (m.media_type === "audio") return <audio src={m.media_url} controls style={{ width: 230, maxWidth: "100%" }} />;
+  if (m.media_type === "audio") return <AudioPlayer src={m.media_url} />;
   return (
     <a href={m.media_url} target="_blank" rel="noopener" className="msg-doc">
       📄 {m.media_name ?? "Documento"}
@@ -415,7 +416,15 @@ export default function ConversasInbox({ initial }: { initial: Conversation[] })
                     <div className={`msg-row${m.direcao === "entrada" ? "" : " right"}`}>
                       <div className={`bubble ${cls}`}>
                         <MediaView m={m} />
-                        {m.conteudo?.trim() && <MensagemTexto texto={m.conteudo} />}
+                        {m.conteudo?.trim() &&
+                          (m.media_type === "audio" ? (
+                            <div className="transcricao">
+                              <span className="transcricao-lbl">Transcrição</span>
+                              {m.conteudo}
+                            </div>
+                          ) : (
+                            <MensagemTexto texto={m.conteudo} />
+                          ))}
                         <div className="meta">
                           {m.autor === "ia" ? "IA" : m.autor === "humano" ? "Você" : "Cliente"} · {horaCurta(m.created_at)}
                         </div>
