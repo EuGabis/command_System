@@ -12,19 +12,32 @@ const STAGE_COLOR: Record<PipelineStage, string> = {
   perdido: "#ef4444",
 };
 
-function LeadCard({
-  c,
-  onDragStart,
-  dragging,
-}: {
-  c: Conversation;
-  onDragStart: (id: string) => void;
-  dragging: boolean;
-}) {
+function LeadInfo({ c }: { c: Conversation }) {
   const nome = c.nome_contato ?? c.contato;
   const d = c.lead_data ?? {};
   const rota = [d.origem, d.destino].filter(Boolean).join(" → ");
   const datas = [d.data_ida, d.data_volta].filter(Boolean).join(" - ");
+  return (
+    <>
+      <strong style={{ fontSize: 14, display: "flex", alignItems: "center", gap: 8 }}>
+        <span
+          className="dot"
+          title={c.platform === "whatsapp" ? "WhatsApp" : "Instagram"}
+          style={{ background: c.platform === "whatsapp" ? "var(--green)" : "#c4497b", flex: "none" }}
+        />
+        {nome}
+      </strong>
+      {c.lead_resumo && <div style={{ fontSize: 12.5, color: "var(--text)", marginTop: 6, lineHeight: 1.4 }}>{c.lead_resumo}</div>}
+      {rota && <div className="lead-field"><b>Rota:</b> {rota}</div>}
+      {datas && <div className="lead-field"><b>Datas:</b> {datas}</div>}
+      {d.passageiros && <div className="lead-field"><b>Pax:</b> {d.passageiros}</div>}
+      {d.tipo_servico && <div className="lead-field"><b>Serviço:</b> {d.tipo_servico}</div>}
+      {d.valor && <div className="lead-field"><b>Valor:</b> {d.valor}</div>}
+    </>
+  );
+}
+
+function LeadCard({ c, onDragStart, dragging }: { c: Conversation; onDragStart: (id: string) => void; dragging: boolean }) {
   return (
     <a
       href={`/painel/conversas?id=${c.id}`}
@@ -32,27 +45,8 @@ function LeadCard({
       draggable
       onDragStart={() => onDragStart(c.id)}
     >
-      <div style={{ display: "flex", justifyContent: "space-between", gap: 8, alignItems: "center" }}>
-        <strong style={{ fontSize: 14, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: 8 }}>
-          <span
-            className="dot"
-            title={c.platform === "whatsapp" ? "WhatsApp" : "Instagram"}
-            style={{ background: c.platform === "whatsapp" ? "var(--green)" : "#c4497b", flex: "none" }}
-          />
-          {nome}
-        </strong>
-      </div>
-      {c.lead_resumo && (
-        <div style={{ fontSize: 12.5, color: "var(--text)", marginTop: 6, lineHeight: 1.4 }}>{c.lead_resumo}</div>
-      )}
-      {rota && <div className="lead-field"><b>Rota:</b> {rota}</div>}
-      {datas && <div className="lead-field"><b>Datas:</b> {datas}</div>}
-      {d.passageiros && <div className="lead-field"><b>Pax:</b> {d.passageiros}</div>}
-      {d.tipo_servico && <div className="lead-field"><b>Serviço:</b> {d.tipo_servico}</div>}
-      {d.valor && <div className="lead-field"><b>Valor:</b> {d.valor}</div>}
-      <div style={{ fontSize: 10.5, color: "var(--muted)", marginTop: 8 }}>
-        +{c.contato}
-      </div>
+      <LeadInfo c={c} />
+      <div style={{ fontSize: 10.5, color: "var(--muted)", marginTop: 8 }}>+{c.contato}</div>
     </a>
   );
 }
@@ -61,6 +55,7 @@ export default function PipelineBoard({ initial }: { initial: Conversation[] }) 
   const [leads, setLeads] = useState<Conversation[]>(initial);
   const [dragId, setDragId] = useState<string | null>(null);
   const [overStage, setOverStage] = useState<PipelineStage | null>(null);
+  const [mobStage, setMobStage] = useState<PipelineStage>("novo_lead");
 
   const carregar = useCallback(async () => {
     try {
@@ -84,14 +79,9 @@ export default function PipelineBoard({ initial }: { initial: Conversation[] }) 
     return map;
   }, [leads]);
 
-  async function soltar(stage: PipelineStage) {
-    const id = dragId;
-    setDragId(null);
-    setOverStage(null);
-    if (!id) return;
+  const moverLead = useCallback(async (id: string, stage: PipelineStage) => {
     const atual = leads.find((l) => l.id === id);
     if (!atual || atual.pipeline_stage === stage) return;
-    // otimista
     setLeads((prev) => prev.map((l) => (l.id === id ? { ...l, pipeline_stage: stage, stage_locked: true } : l)));
     try {
       await fetch(`/api/pipeline/${id}`, {
@@ -102,42 +92,89 @@ export default function PipelineBoard({ initial }: { initial: Conversation[] }) 
     } catch {
       carregar();
     }
+  }, [leads, carregar]);
+
+  function soltar(stage: PipelineStage) {
+    const id = dragId;
+    setDragId(null);
+    setOverStage(null);
+    if (id) void moverLead(id, stage);
   }
 
+  const cardsMob = porEstagio[mobStage] ?? [];
+
   return (
-    <div className="kanban">
-      {PIPELINE_STAGES.map((s) => {
-        const cards = porEstagio[s.key] ?? [];
-        return (
-          <div
-            key={s.key}
-            className={`kanban-col${overStage === s.key ? " drop" : ""}`}
-            onDragOver={(e) => {
-              e.preventDefault();
-              if (overStage !== s.key) setOverStage(s.key);
-            }}
-            onDragLeave={() => setOverStage((v) => (v === s.key ? null : v))}
-            onDrop={() => soltar(s.key)}
-          >
-            <div className="kanban-col-head">
-              <span style={{ display: "flex", alignItems: "center", gap: 8, fontWeight: 700, fontSize: 14 }}>
-                <span className="dot" style={{ background: STAGE_COLOR[s.key] }} />
-                {s.label}
-              </span>
-              <span className="stage-count">{cards.length}</span>
+    <>
+      {/* ===== Desktop: Kanban ===== */}
+      <div className="kanban">
+        {PIPELINE_STAGES.map((s) => {
+          const cards = porEstagio[s.key] ?? [];
+          return (
+            <div
+              key={s.key}
+              className={`kanban-col${overStage === s.key ? " drop" : ""}`}
+              onDragOver={(e) => { e.preventDefault(); if (overStage !== s.key) setOverStage(s.key); }}
+              onDragLeave={() => setOverStage((v) => (v === s.key ? null : v))}
+              onDrop={() => soltar(s.key)}
+            >
+              <div className="kanban-col-head">
+                <span style={{ display: "flex", alignItems: "center", gap: 8, fontWeight: 700, fontSize: 14 }}>
+                  <span className="dot" style={{ background: STAGE_COLOR[s.key] }} />
+                  {s.label}
+                </span>
+                <span className="stage-count">{cards.length}</span>
+              </div>
+              <div className="kanban-col-body">
+                {cards.length === 0 ? (
+                  <div style={{ fontSize: 12, color: "var(--muted)", padding: "8px 4px", textAlign: "center" }}>—</div>
+                ) : (
+                  cards.map((c) => <LeadCard key={c.id} c={c} dragging={dragId === c.id} onDragStart={setDragId} />)
+                )}
+              </div>
             </div>
-            <div className="kanban-col-body">
-              {cards.length === 0 ? (
-                <div style={{ fontSize: 12, color: "var(--muted)", padding: "8px 4px", textAlign: "center" }}>—</div>
-              ) : (
-                cards.map((c) => (
-                  <LeadCard key={c.id} c={c} dragging={dragId === c.id} onDragStart={setDragId} />
-                ))
-              )}
+          );
+        })}
+      </div>
+
+      {/* ===== Mobile: seletor de estágio + lista ===== */}
+      <div className="pipe-mobile">
+        <div className="chip-scroll" style={{ paddingBottom: 4 }}>
+          {PIPELINE_STAGES.map((s) => (
+            <button key={s.key} className={`chip${mobStage === s.key ? " active" : ""}`} onClick={() => setMobStage(s.key)}>
+              <span className="dot" style={{ background: STAGE_COLOR[s.key] }} />
+              {s.label}
+              <span className="chip-count">{porEstagio[s.key].length}</span>
+            </button>
+          ))}
+        </div>
+
+        <div className="pipe-list">
+          {cardsMob.length === 0 ? (
+            <div style={{ color: "var(--muted)", fontSize: 14, padding: "24px 4px", textAlign: "center" }}>
+              Nenhum lead em “{PIPELINE_STAGES.find((s) => s.key === mobStage)?.label}”.
             </div>
-          </div>
-        );
-      })}
-    </div>
+          ) : (
+            cardsMob.map((c) => (
+              <div key={c.id} className="pipe-card">
+                <LeadInfo c={c} />
+                <div className="pipe-card-foot">
+                  <select
+                    className="select"
+                    value={c.pipeline_stage}
+                    onChange={(e) => moverLead(c.id, e.target.value as PipelineStage)}
+                    style={{ flex: 1 }}
+                  >
+                    {PIPELINE_STAGES.map((s) => (
+                      <option key={s.key} value={s.key}>{s.label}</option>
+                    ))}
+                  </select>
+                  <a href={`/painel/conversas?id=${c.id}`} className="btn secondary">Abrir</a>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+    </>
   );
 }
