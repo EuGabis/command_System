@@ -166,6 +166,33 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 700; letter-spacing:
 /* Logo real (GAABTUR) num cartão branco */
 .brand-logo { flex: none; display: inline-flex; background: #fff; border-radius: 8px; padding: 5px 9px; }
 .brand-logo img { height: 26px; width: auto; display: block; }
+
+/* ===== Dashboard ===== */
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 22px; }
+@media (max-width: 900px) { .kpi-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { .kpi-grid { grid-template-columns: 1fr; } }
+.kpi {
+  position: relative; background: var(--panel); border: 1px solid var(--border);
+  border-radius: var(--r-card); padding: 16px 18px 17px; overflow: hidden;
+}
+.kpi::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--brand); }
+.kpi-top { display: flex; align-items: center; justify-content: space-between; }
+.kpi-ic { color: var(--brand); opacity: .85; display: inline-flex; }
+.kpi-num { font-family: var(--font-display); font-weight: 800; font-size: 30px; line-height: 1.05; margin-top: 10px; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.kpi-sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
+
+/* Cartão de canal */
+.chan { position: relative; background: var(--panel); border: 1px solid var(--border); border-radius: var(--r-card); padding: 20px; overflow: hidden; transition: border-color .15s ease, transform .15s ease; }
+.chan:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+.chan::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 3px; background: linear-gradient(90deg, var(--brand), transparent 70%); opacity: .8; }
+.chan-head { display: flex; align-items: center; gap: 12px; }
+.chan-ic { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; flex: none; }
+.chan-name { font-family: var(--font-display); font-weight: 700; font-size: 17px; flex: 1; }
+.status-pill { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 999px; border: 1px solid var(--border); }
+.chan-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 18px 0; }
+.metric { background: var(--panel-2); border: 1px solid var(--border); border-radius: var(--r-ctrl); padding: 13px 15px; }
+.metric .lbl { font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.metric .val { font-family: var(--font-display); font-weight: 800; font-size: 26px; margin-top: 6px; font-variant-numeric: tabular-nums; }
 .brand-sub { font-size: 11px; color: var(--muted); white-space: nowrap; }
 
 /* rodapé da sidebar (usuário + sair) */
