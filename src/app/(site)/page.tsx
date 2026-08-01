@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 const WHATS = "5585984500465";
 const waLink = `https://wa.me/${WHATS}?text=${encodeURIComponent("Olá! Gostaria de solicitar um orçamento de viagem.")}`;
 
-const HERO_IMG = "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=1300&q=80";
+const HERO_IMG = "/banner.jpg";
 const CTA_IMG = "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1600&q=80";
 
 const porque = [
@@ -35,19 +35,10 @@ const depoimentos = [
   { txt: "Suporte incrível! Tive assistência em todo momento. Já vou fechar a próxima viagem com eles.", nome: "Fernanda L.", cidade: "Rio de Janeiro · RJ", img: "https://i.pravatar.cc/80?img=32" },
 ];
 
-function Logo() {
+function Logo({ height = 46 }: { height?: number }) {
   return (
-    <div className="g-logo">
-      <svg className="mark" viewBox="0 0 48 48" aria-hidden>
-        <path d="M8 30a17 17 0 1 1 30 6" fill="none" stroke="#1b1b1b" strokeWidth="5" strokeLinecap="round" />
-        <path d="M12 34a15 15 0 0 1 24-16" fill="none" stroke="#f2871e" strokeWidth="5" strokeLinecap="round" />
-        <path d="M27 15l10-3-3 10-3-4-6 3 2-6z" fill="#f2871e" />
-      </svg>
-      <span className="wm">
-        <b>GAAB<span>TUR</span></b>
-        <small>Viagens e Turismo</small>
-      </span>
-    </div>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src="/logo.jpeg" alt="GAABTUR — Viagens e Turismo" className="g-logo-img" style={{ height }} />
   );
 }
 
@@ -71,9 +62,9 @@ export default function SitePage() {
         </div>
       </header>
 
-      {/* Hero */}
-      <section className="g-hero">
-        <div className="g-hero-grid">
+      {/* Hero — capa de ponta a ponta */}
+      <section className="g-hero" style={{ backgroundImage: `url(${HERO_IMG})` }}>
+        <div className="g-container g-hero-inner">
           <div className="g-hero-left">
             <h1>Sua próxima viagem começa com a <span className="orange">GAABTUR.</span></h1>
             <p>
@@ -91,7 +82,6 @@ export default function SitePage() {
               <span><span className="dot" /> 9 anos de experiência</span>
             </div>
           </div>
-          <div className="g-hero-photo" style={{ backgroundImage: `url(${HERO_IMG})` }} />
         </div>
       </section>
 
