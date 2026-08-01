@@ -302,7 +302,7 @@ export default function SitePage() {
             </div>
           </div>
           <div className="g-foot-bottom">
-            © {new Date().getFullYear()} GAABTUR Viagens e Turismo. Todos os direitos reservados.
+            © 2026 GAABTUR Viagens e Turismo. Todos os direitos reservados.
           </div>
         </div>
       </footer>
