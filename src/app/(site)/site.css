@@ -101,8 +101,8 @@
 @media (max-width: 900px) { .g-why { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 520px) { .g-why { grid-template-columns: 1fr; } }
 .g-why-item { text-align: center; padding: 10px; }
-.g-ic { width: 46px; height: 46px; margin: 0 auto 16px; color: var(--orange); }
-.g-ic svg { width: 100%; height: 100%; }
+.g-ic { height: 46px; margin: 0 auto 16px; color: var(--orange); display: flex; align-items: center; justify-content: center; }
+.g-ic svg { height: 42px; width: auto; max-width: 100%; }
 .g-why-item h3 { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
 .g-why-item p { color: var(--muted-d); font-size: 13.5px; margin-top: 8px; line-height: 1.55; }
 

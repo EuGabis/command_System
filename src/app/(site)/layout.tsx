@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Montserrat, Inter } from "next/font/google";
+import { config } from "@fortawesome/fontawesome-svg-core";
+import "@fortawesome/fontawesome-svg-core/styles.css";
 import "./site.css";
+
+config.autoAddCss = false; // evita o "flash" de ícone gigante no SSR
 
 const display = Montserrat({
   subsets: ["latin"],
