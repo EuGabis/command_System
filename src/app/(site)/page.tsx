@@ -1,6 +1,31 @@
 import OrcamentoForm from "@/components/site/OrcamentoForm";
 import Reveal from "@/components/site/Reveal";
 import { Ico, WhatsIcon } from "@/components/site/icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faUsers, faTicket, faGlobe, faPaw, faPlane, faHotel, faShip, faPassport, faHeadset,
+} from "@fortawesome/free-solid-svg-icons";
+
+const FA_MAP = {
+  users: faUsers, ticket: faTicket, globe: faGlobe, paw: faPaw, plane: faPlane,
+  hotel: faHotel, ship: faShip, passport: faPassport, headset: faHeadset,
+} as const;
+
+// Ícone dos blocos "Por que escolher" e "Serviços" (sólidos, Font Awesome).
+function SvcIcon({ name }: { name: string }) {
+  if (name === "shieldcheck") {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden>
+        <path
+          fill="currentColor"
+          fillRule="evenodd"
+          d="M12 2 4 5v6c0 5 3.4 8.5 8 10 4.6-1.5 8-5 8-10V5l-8-3zM16.8 8.3 10.6 14.5 7.4 11.3 5.9 12.8 10.6 17.5 18.3 9.8 16.8 8.3z"
+        />
+      </svg>
+    );
+  }
+  return <FontAwesomeIcon icon={FA_MAP[name as keyof typeof FA_MAP] ?? faGlobe} />;
+}
 
 export const dynamic = "force-dynamic";
 
@@ -11,9 +36,9 @@ const HERO_IMG = "/banner.jpg";
 const CTA_IMG = "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1600&q=80";
 
 const porque = [
-  { ic: "user", t: "Atendimento personalizado", d: "Cuidamos de cada detalhe para você viajar tranquilo." },
-  { ic: "tag", t: "Melhores tarifas", d: "Trabalhamos com as melhores companhias e condições do mercado." },
-  { ic: "headset", t: "Suporte completo", d: "Antes, durante e depois da sua viagem, estamos sempre com você." },
+  { ic: "users", t: "Atendimento personalizado", d: "Cuidamos de cada detalhe para você viajar tranquilo." },
+  { ic: "ticket", t: "Melhores tarifas", d: "Trabalhamos com as melhores companhias e condições do mercado." },
+  { ic: "shieldcheck", t: "Suporte completo", d: "Antes, durante e depois da sua viagem, estamos sempre com você." },
   { ic: "globe", t: "Nacional e internacional", d: "Para onde você quiser, nós levamos você." },
   { ic: "paw", t: "Viagens com pet", d: "Assessoria completa para viajar com o seu melhor amigo." },
 ];
@@ -21,7 +46,7 @@ const porque = [
 const servicos = [
   { ic: "plane", t: "Passagens aéreas", d: "Nacionais e internacionais com as melhores tarifas." },
   { ic: "hotel", t: "Hotéis", d: "As melhores opções de hospedagem no mundo todo." },
-  { ic: "insurance", t: "Seguro viagem", d: "Viaje com tranquilidade e proteção garantida." },
+  { ic: "shieldcheck", t: "Seguro viagem", d: "Viaje com tranquilidade e proteção garantida." },
   { ic: "ship", t: "Cruzeiros", d: "Experiências incríveis em alto mar." },
   { ic: "passport", t: "Passaporte", d: "Assessoria completa para emissão do seu passaporte." },
   { ic: "globe", t: "Viagens internacionais", d: "Roteiros personalizados para realizar o seu sonho." },
@@ -70,7 +95,7 @@ export default function SitePage() {
       <section className="g-hero" style={{ backgroundImage: `url(${HERO_IMG})` }}>
         <div className="g-container g-hero-inner">
           <div className="g-hero-left">
-            <h1>Sua próxima viagem começa com a <span className="orange">GAABTUR.</span></h1>
+            <h1>Sua próxima viagem começa com a <span style={{ color: "#fff" }}>GAAB</span><span className="orange">TUR.</span></h1>
             <p>
               Aqui você encontra as melhores opções em passagens, hotéis, seguro viagem, passaporte
               e muito mais, com atendimento humanizado do início ao fim da sua viagem.
@@ -93,14 +118,14 @@ export default function SitePage() {
       <section className="g-section dark">
         <div className="g-container">
           <div className="g-section-head">
-            <h2>Por que escolher a <span className="orange">GAABTUR</span>?</h2>
+            <h2>Por que escolher a <span style={{ color: "#fff" }}>GAAB</span><span className="orange">TUR</span>?</h2>
             <span className="g-divider" />
           </div>
           <div className="g-why">
             {porque.map((p, i) => (
               <Reveal key={p.t} delay={i * 60}>
                 <div className="g-why-item">
-                  <div className="g-ic"><Ico name={p.ic} /></div>
+                  <div className="g-ic"><SvcIcon name={p.ic} /></div>
                   <h3>{p.t}</h3>
                   <p>{p.d}</p>
                 </div>
@@ -121,7 +146,7 @@ export default function SitePage() {
             {servicos.map((s, i) => (
               <Reveal key={s.t} delay={i * 50}>
                 <div className="g-svc">
-                  <div className="g-ic"><Ico name={s.ic} /></div>
+                  <div className="g-ic"><SvcIcon name={s.ic} /></div>
                   <h3>{s.t}</h3>
                   <p>{s.d}</p>
                 </div>
@@ -141,7 +166,7 @@ export default function SitePage() {
           <div className="g-videos">
             {videos.map((v) => (
               <figure className="g-video" key={v.src}>
-                <video controls preload="metadata" playsInline>
+                <video controls preload="none" poster="/video-poster.jpg" playsInline>
                   <source src={v.src} type="video/mp4" />
                   Seu navegador não suporta vídeo.
                 </video>
