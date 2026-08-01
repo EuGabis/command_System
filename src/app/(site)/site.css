@@ -17,6 +17,7 @@
   font-family: var(--font-body), system-ui, sans-serif;
   color: var(--text); background: var(--paper);
   min-height: 100vh; line-height: 1.6; -webkit-font-smoothing: antialiased; font-size: 16px;
+  overflow-x: hidden;
 }
 .gaab-root * { box-sizing: border-box; }
 .gaab-root h1, .gaab-root h2, .gaab-root h3 {
@@ -50,7 +51,25 @@
 .g-nav-links { display: flex; gap: 30px; align-items: center; }
 .g-nav-links a { font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,.82); transition: color .16s; }
 .g-nav-links a:hover, .g-nav-links a.active { color: var(--orange); }
-@media (max-width: 940px) { .g-nav-links { display: none; } }
+.g-btn-sm { padding: 11px 18px; font-size: 13.5px; white-space: nowrap; }
+.g-nav-right { display: flex; align-items: center; gap: 10px; }
+
+/* Menu mobile (hambúrguer via <details>) */
+.g-menu { display: none; position: relative; }
+.g-menu summary { list-style: none; cursor: pointer; width: 44px; height: 44px; display: grid; place-items: center; border: 1px solid var(--line-d); border-radius: 10px; color: #fff; }
+.g-menu summary::-webkit-details-marker { display: none; }
+.g-menu-panel { position: absolute; right: 0; top: 54px; background: var(--charcoal); border: 1px solid var(--line-d); border-radius: 12px; padding: 8px; min-width: 210px; display: flex; flex-direction: column; box-shadow: 0 24px 48px rgba(0,0,0,.5); z-index: 60; }
+.g-menu-panel a { padding: 12px 14px; border-radius: 8px; color: rgba(255,255,255,.86); font-size: 15px; }
+.g-menu-panel a:hover { background: var(--panel); color: #fff; }
+
+@media (max-width: 940px) {
+  .g-nav-links { display: none; }
+  .g-menu { display: block; }
+}
+@media (max-width: 420px) {
+  .g-btn-label { display: none; } /* botão vira só "orçamento" em telas pequenas */
+  .g-nav { gap: 10px; }
+}
 
 /* Logo wordmark (trocar por /logo.png depois) */
 .g-logo { display: flex; align-items: center; gap: 11px; }
@@ -152,15 +171,17 @@
 /* ===== Formulário (integração pipeline) ===== */
 .g-form-section { background: var(--off); }
 .g-form-wrap { display: grid; grid-template-columns: 1fr 1.1fr; gap: 48px; align-items: center; }
+.g-form-wrap > * { min-width: 0; }
 @media (max-width: 820px) { .g-form-wrap { grid-template-columns: 1fr; gap: 28px; } }
 .g-quote { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 28px; box-shadow: 0 20px 50px rgba(20,20,22,.08); }
 .g-quote h3 { font-size: 21px; color: var(--ink); font-weight: 700; }
 .g-quote .g-hint { font-size: 13.5px; color: var(--muted); margin-top: 5px; }
 .g-field { margin-top: 14px; }
 .g-field label { display: block; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
-.g-input, .g-select { width: 100%; padding: 12px 13px; border-radius: 9px; border: 1.5px solid var(--line); font-size: 14.5px; font-family: var(--font-body); background: #fff; color: var(--text); outline: none; transition: border-color .16s; }
+.g-input, .g-select { width: 100%; min-width: 0; padding: 12px 13px; border-radius: 9px; border: 1.5px solid var(--line); font-size: 14.5px; font-family: var(--font-body); background: #fff; color: var(--text); outline: none; transition: border-color .16s; }
 .g-input:focus, .g-select:focus { border-color: var(--orange); }
 .g-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 480px) { .g-row { grid-template-columns: 1fr; } }
 .g-honey { position: absolute; left: -9999px; opacity: 0; }
 .g-note { margin-top: 14px; font-size: 14px; padding: 12px 14px; border-radius: 9px; }
 .g-note.ok { background: #eef8f0; color: #237a42; border: 1px solid #cde9d4; }

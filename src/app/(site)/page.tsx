@@ -85,9 +85,23 @@ export default function SitePage() {
             <a href="#orcamento">Orçamento</a>
             <a href="#contato">Contato</a>
           </nav>
-          <a className="g-btn g-btn-primary" href={waLink} target="_blank" rel="noopener">
-            <WhatsIcon /> Solicitar orçamento
-          </a>
+          <div className="g-nav-right">
+            <a className="g-btn g-btn-primary g-btn-sm" href={waLink} target="_blank" rel="noopener">
+              <WhatsIcon /> <span className="g-btn-label">Solicitar </span>orçamento
+            </a>
+            <details className="g-menu">
+              <summary aria-label="Menu">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M3 6h18M3 12h18M3 18h18" /></svg>
+              </summary>
+              <div className="g-menu-panel">
+                <a href="#top">Início</a>
+                <a href="#servicos">Serviços</a>
+                <a href="#depoimentos">Depoimentos</a>
+                <a href="#orcamento">Orçamento</a>
+                <a href="#contato">Contato</a>
+              </div>
+            </details>
+          </div>
         </div>
       </header>
 
@@ -228,10 +242,10 @@ export default function SitePage() {
           <div>
             <span className="g-eyebrow">Orçamento online</span>
             <h2 style={{ fontSize: "clamp(26px,3.4vw,38px)", marginTop: 12, color: "var(--ink)" }}>
-              Prefere pedir por aqui? A gente te chama no WhatsApp.
+              Solicite sua cotação online.
             </h2>
             <p style={{ color: "var(--muted)", marginTop: 14, fontSize: 16.5, maxWidth: "44ch" }}>
-              Preencha os dados da viagem e nossa equipe retorna com as melhores opções — rápido e sem compromisso.
+              Nós encontramos a melhor opção para a sua viagem e entraremos em contato.
             </p>
           </div>
           <OrcamentoForm />
