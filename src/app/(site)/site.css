@@ -26,8 +26,8 @@
 .gaab-root p { margin: 0; }
 .gaab-root a { color: inherit; text-decoration: none; }
 .orange { color: var(--orange); }
-/* Marca: GAAB preto (cor da marca). Contorno claro sutil p/ legibilidade em fundo escuro. */
-.wm-gaab { color: #111114; text-shadow: 0 0 1px rgba(255,255,255,.85), 0 0 6px rgba(255,255,255,.25); }
+/* Marca no wordmark: GAAB branco (fundo escuro) + TUR laranja. */
+.wm-gaab { color: #fff; }
 
 .g-container { width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 28px; }
 .g-eyebrow { font-family: var(--font-body); font-size: 12px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--orange); }
