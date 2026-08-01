@@ -95,7 +95,7 @@ export default function SitePage() {
       <section className="g-hero" style={{ backgroundImage: `url(${HERO_IMG})` }}>
         <div className="g-container g-hero-inner">
           <div className="g-hero-left">
-            <h1>Sua próxima viagem começa com a <span style={{ color: "#fff" }}>GAAB</span><span className="orange">TUR.</span></h1>
+            <h1>Sua próxima viagem começa com a <span className="wm-gaab">GAAB</span><span className="orange">TUR.</span></h1>
             <p>
               Aqui você encontra as melhores opções em passagens, hotéis, seguro viagem, passaporte
               e muito mais, com atendimento humanizado do início ao fim da sua viagem.
@@ -118,7 +118,7 @@ export default function SitePage() {
       <section className="g-section dark">
         <div className="g-container">
           <div className="g-section-head">
-            <h2>Por que escolher a <span style={{ color: "#fff" }}>GAAB</span><span className="orange">TUR</span>?</h2>
+            <h2>Por que escolher a <span className="wm-gaab">GAAB</span><span className="orange">TUR</span>?</h2>
             <span className="g-divider" />
           </div>
           <div className="g-why">
