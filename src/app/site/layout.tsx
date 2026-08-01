@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
-import { Newsreader, Inter } from "next/font/google";
+import { Montserrat, Inter } from "next/font/google";
 import "./site.css";
 
-const display = Newsreader({
+const display = Montserrat({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
+  weight: ["500", "600", "700", "800"],
   variable: "--font-display",
   display: "swap",
 });
