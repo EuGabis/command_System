@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import LogoutButton from "./LogoutButton";
+import SessionGuard from "./SessionGuard";
 import Icon, { type IconName } from "./Icon";
 
 const nav: { href: string; label: string; icon: IconName }[] = [
@@ -74,6 +75,7 @@ export default function AppShell({
 
   return (
     <div className="shell">
+      <SessionGuard />
       {/* ===== Sidebar (desktop) ===== */}
       <aside className="sidebar">
         <div className="brand">

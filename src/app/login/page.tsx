@@ -28,6 +28,7 @@ export default function LoginPage() {
     try {
       const { error } = await supabaseBrowser().auth.signInWithPassword({ email, password: senha });
       if (error) throw new Error("E-mail ou senha inválidos.");
+      try { sessionStorage.setItem("gaab_sess", "1"); } catch {}
       router.push("/painel");
       router.refresh();
     } catch (e) {
@@ -51,6 +52,7 @@ export default function LoginPage() {
       if (!res.ok) throw new Error(data.error);
       const { error } = await supabaseBrowser().auth.signInWithPassword({ email, password: senha });
       if (error) throw error;
+      try { sessionStorage.setItem("gaab_sess", "1"); } catch {}
       router.push("/painel");
       router.refresh();
     } catch (e) {
