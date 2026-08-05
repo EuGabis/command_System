@@ -10,6 +10,11 @@ import type {
   PipelineStage,
   LeadData,
   QuickReply,
+  PipelineStageRow,
+  StageTipo,
+  Tag,
+  CustomField,
+  CustomFieldTipo,
 } from "./types";
 
 export { isSupabaseConfigured };
@@ -301,6 +306,135 @@ export async function createQuickReply(titulo: string, texto: string): Promise<Q
 
 export async function deleteQuickReply(id: string): Promise<void> {
   const { error } = await supabaseAdmin().from("quick_replies").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+}
+
+/* ============ CRM — Fase 1 ============ */
+
+function slugify(s: string): string {
+  return s
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "")
+    .slice(0, 32) || "etapa";
+}
+
+/* ---------- Etapas do funil ---------- */
+
+export async function listStages(): Promise<PipelineStageRow[]> {
+  if (!isSupabaseConfigured()) return [];
+  const { data } = await supabaseAdmin()
+    .from("pipeline_stages")
+    .select("*")
+    .order("ordem", { ascending: true });
+  return (data as PipelineStageRow[]) ?? [];
+}
+
+export async function createStage(nome: string, cor: string, tipo: StageTipo): Promise<PipelineStageRow> {
+  const client = supabaseAdmin();
+  const { data: last } = await client
+    .from("pipeline_stages")
+    .select("ordem")
+    .order("ordem", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  const ordem = ((last?.ordem as number) ?? 0) + 1;
+  const key = `${slugify(nome)}_${ordem}`;
+  const { data, error } = await client
+    .from("pipeline_stages")
+    .insert({ key, nome, cor, tipo, ordem })
+    .select("*")
+    .single();
+  if (error) throw new Error(error.message);
+  return data as PipelineStageRow;
+}
+
+export async function updateStage(
+  id: string,
+  patch: Partial<{ nome: string; cor: string; tipo: StageTipo; ordem: number }>,
+): Promise<void> {
+  const { error } = await supabaseAdmin().from("pipeline_stages").update(patch).eq("id", id);
+  if (error) throw new Error(error.message);
+}
+
+export async function deleteStage(id: string): Promise<void> {
+  const { error } = await supabaseAdmin().from("pipeline_stages").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+}
+
+/* ---------- Tags ---------- */
+
+export async function listTags(): Promise<Tag[]> {
+  if (!isSupabaseConfigured()) return [];
+  const { data } = await supabaseAdmin().from("tags").select("*").order("nome", { ascending: true });
+  return (data as Tag[]) ?? [];
+}
+
+export async function createTag(nome: string, cor: string): Promise<Tag> {
+  const { data, error } = await supabaseAdmin()
+    .from("tags")
+    .insert({ nome, cor })
+    .select("*")
+    .single();
+  if (error) throw new Error(error.message);
+  return data as Tag;
+}
+
+export async function updateTag(id: string, patch: Partial<{ nome: string; cor: string }>): Promise<void> {
+  const { error } = await supabaseAdmin().from("tags").update(patch).eq("id", id);
+  if (error) throw new Error(error.message);
+}
+
+export async function deleteTag(id: string): Promise<void> {
+  const { error } = await supabaseAdmin().from("tags").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+}
+
+/* ---------- Campos personalizados ---------- */
+
+export async function listCustomFields(): Promise<CustomField[]> {
+  if (!isSupabaseConfigured()) return [];
+  const { data } = await supabaseAdmin()
+    .from("custom_fields")
+    .select("*")
+    .order("ordem", { ascending: true });
+  return ((data as CustomField[]) ?? []).map((f) => ({ ...f, opcoes: f.opcoes ?? [] }));
+}
+
+export async function createCustomField(
+  nome: string,
+  tipo: CustomFieldTipo,
+  opcoes: string[],
+): Promise<CustomField> {
+  const client = supabaseAdmin();
+  const { data: last } = await client
+    .from("custom_fields")
+    .select("ordem")
+    .order("ordem", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  const ordem = ((last?.ordem as number) ?? 0) + 1;
+  const { data, error } = await client
+    .from("custom_fields")
+    .insert({ nome, tipo, opcoes, ordem })
+    .select("*")
+    .single();
+  if (error) throw new Error(error.message);
+  return data as CustomField;
+}
+
+export async function updateCustomField(
+  id: string,
+  patch: Partial<{ nome: string; tipo: CustomFieldTipo; opcoes: string[] }>,
+): Promise<void> {
+  const { error } = await supabaseAdmin().from("custom_fields").update(patch).eq("id", id);
+  if (error) throw new Error(error.message);
+}
+
+export async function deleteCustomField(id: string): Promise<void> {
+  const { error } = await supabaseAdmin().from("custom_fields").delete().eq("id", id);
   if (error) throw new Error(error.message);
 }
 
