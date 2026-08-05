@@ -62,6 +62,35 @@ export const PIPELINE_STAGES: { key: PipelineStage; label: string }[] = [
   { key: "perdido", label: "Perdido" },
 ];
 
+/* ===== CRM (Fase 1): etapas configuráveis, tags e campos personalizados ===== */
+
+export type StageTipo = "em_processo" | "ganho" | "perdido";
+
+export interface PipelineStageRow {
+  id: string;
+  key: string;
+  nome: string;
+  cor: string;
+  tipo: StageTipo;
+  ordem: number;
+}
+
+export interface Tag {
+  id: string;
+  nome: string;
+  cor: string;
+}
+
+export type CustomFieldTipo = "texto" | "numero" | "data" | "selecao";
+
+export interface CustomField {
+  id: string;
+  nome: string;
+  tipo: CustomFieldTipo;
+  opcoes: string[];
+  ordem: number;
+}
+
 // Dados do lead extraídos pela IA. Todos opcionais — a IA preenche o que conseguir.
 export interface LeadData {
   origem?: string;
