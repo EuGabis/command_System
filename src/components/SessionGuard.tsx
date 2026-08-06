@@ -5,18 +5,17 @@ import { useRouter } from "next/navigation";
 import { supabaseBrowser } from "@/lib/supabaseBrowser";
 
 const FLAG = "gaab_sess";
-const IDLE_MS = 15 * 60_000; // 15 min sem atividade
-const HIDDEN_MS = 90_000; //     90 s com a aba oculta
+const IDLE_MS = 30 * 60_000; // 30 min sem atividade
 
 // Segurança de sessão:
 // - Encerra ao fechar a guia (o sessionStorage é limpo pelo navegador).
-// - Encerra por inatividade ou quando a aba fica oculta por um tempo.
+// - Encerra após 30 min de inatividade (inclui aba em segundo plano).
 export default function SessionGuard() {
   const router = useRouter();
 
   useEffect(() => {
-    let idle: ReturnType<typeof setTimeout>;
-    let hidden: ReturnType<typeof setTimeout> | undefined;
+    let timer: ReturnType<typeof setTimeout>;
+    let last = Date.now();
     let saindo = false;
 
     async function sair() {
@@ -35,29 +34,25 @@ export default function SessionGuard() {
       return;
     }
 
-    function resetIdle() {
-      clearTimeout(idle);
-      idle = setTimeout(() => void sair(), IDLE_MS);
+    function reset() {
+      last = Date.now();
+      clearTimeout(timer);
+      timer = setTimeout(() => void sair(), IDLE_MS);
     }
     function onVisibility() {
-      if (document.hidden) {
-        hidden = setTimeout(() => void sair(), HIDDEN_MS);
-      } else {
-        if (hidden) clearTimeout(hidden);
-        resetIdle();
-      }
+      // ao voltar pra aba, confere se estourou o tempo (timers em background são throttled)
+      if (!document.hidden && Date.now() - last >= IDLE_MS) void sair();
     }
 
     const eventos = ["mousemove", "keydown", "click", "scroll", "touchstart"];
-    eventos.forEach((e) => window.addEventListener(e, resetIdle, { passive: true }));
+    eventos.forEach((e) => window.addEventListener(e, reset, { passive: true }));
     document.addEventListener("visibilitychange", onVisibility);
-    resetIdle();
+    reset();
 
     return () => {
-      eventos.forEach((e) => window.removeEventListener(e, resetIdle));
+      eventos.forEach((e) => window.removeEventListener(e, reset));
       document.removeEventListener("visibilitychange", onVisibility);
-      clearTimeout(idle);
-      if (hidden) clearTimeout(hidden);
+      clearTimeout(timer);
     };
   }, [router]);
 

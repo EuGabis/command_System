@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getConversationById } from "@/lib/repo";
 import { enviarMensagemManual } from "@/lib/engine";
+import { rateLimit, clientIp } from "@/lib/ratelimit";
 import type { Platform } from "@/lib/types";
 
 // Envio manual pelo operador. Envia ao contato e registra a saída (autor humano).
@@ -8,6 +9,10 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
+  // limite: 40 envios/min por IP (evita spam/loop)
+  if (!rateLimit(`send:${clientIp(req)}`, 40, 60_000).ok) {
+    return NextResponse.json({ error: "Muitos envios. Aguarde um instante." }, { status: 429 });
+  }
   const { id } = await params;
   const body = await req.json().catch(() => ({}));
   const texto = (body?.texto as string | undefined)?.trim();

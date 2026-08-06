@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin, isSupabaseConfigured } from "@/lib/supabase";
+import { rateLimit, clientIp } from "@/lib/ratelimit";
 
 // GET -> já existe um dono cadastrado?
 export async function GET() {
@@ -17,6 +18,9 @@ export async function GET() {
 
 // POST -> cria a conta do dono (SOMENTE se ainda não existir nenhum usuário)
 export async function POST(req: NextRequest) {
+  if (!rateLimit(`owner:${clientIp(req)}`, 5, 60_000).ok) {
+    return NextResponse.json({ error: "Muitas tentativas. Aguarde." }, { status: 429 });
+  }
   if (!isSupabaseConfigured()) {
     return NextResponse.json({ error: "Supabase não configurado." }, { status: 400 });
   }
