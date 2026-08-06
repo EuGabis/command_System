@@ -3,6 +3,7 @@ import { processarMensagemRecebida } from "@/lib/engine";
 import { evolutionGetBase64 } from "@/lib/evolution";
 import { uploadBase64, mediaTypeFromMime } from "@/lib/storage";
 import { transcreverAudio } from "@/lib/ai";
+import { rateLimit, clientIp } from "@/lib/ratelimit";
 import type { MediaInfo } from "@/lib/repo";
 
 interface EvolutionMessage {
@@ -40,6 +41,10 @@ function detectarMidia(msg: EvolutionMessage): { kind: "image" | "audio" | "vide
 
 // Recebe eventos da Evolution API (MESSAGES_UPSERT). Sempre responde 200.
 export async function POST(req: NextRequest) {
+  // rate limit: descarta silenciosamente acima de 240 eventos/min por IP
+  if (!rateLimit(`wh-evo:${clientIp(req)}`, 240, 60_000).ok) {
+    return NextResponse.json({ ok: true });
+  }
   try {
     const body = await req.json();
     const event = (body?.event as string | undefined)?.toLowerCase();

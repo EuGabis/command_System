@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { upsertConversation, addMessage, saveLead } from "@/lib/repo";
+import { rateLimit, clientIp } from "@/lib/ratelimit";
 import type { LeadData } from "@/lib/types";
 
 // Normaliza telefone para dígitos com DDI (Brasil por padrão).
@@ -11,6 +12,15 @@ function normalizarTelefone(raw: string): string | null {
 }
 
 export async function POST(req: NextRequest) {
+  // rate limit: no máx. 5 orçamentos por minuto por IP
+  const rl = rateLimit(`orcamento:${clientIp(req)}`, 5, 60_000);
+  if (!rl.ok) {
+    return NextResponse.json(
+      { error: "Muitas solicitações. Tente novamente em instantes." },
+      { status: 429, headers: { "Retry-After": String(rl.retryAfter) } },
+    );
+  }
+
   const body = await req.json().catch(() => ({}));
 
   // honeypot anti-spam: bots preenchem "empresa"

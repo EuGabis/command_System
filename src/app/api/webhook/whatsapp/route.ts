@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getConnection } from "@/lib/repo";
 import { processarMensagemRecebida } from "@/lib/engine";
+import { rateLimit, clientIp } from "@/lib/ratelimit";
 
 // Verificação do webhook (Meta faz GET com hub.challenge)
 export async function GET(req: NextRequest) {
@@ -18,6 +19,9 @@ export async function GET(req: NextRequest) {
 
 // Eventos de mensagens
 export async function POST(req: NextRequest) {
+  if (!rateLimit(`wh-wa:${clientIp(req)}`, 240, 60_000).ok) {
+    return NextResponse.json({ ok: true });
+  }
   try {
     const body = await req.json();
     const entry = body?.entry?.[0];
