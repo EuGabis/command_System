@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getConnection } from "@/lib/repo";
 import { processarMensagemRecebida } from "@/lib/engine";
+import { rateLimit, clientIp } from "@/lib/ratelimit";
 
 export async function GET(req: NextRequest) {
   const params = req.nextUrl.searchParams;
@@ -16,6 +17,9 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  if (!rateLimit(`wh-ig:${clientIp(req)}`, 240, 60_000).ok) {
+    return NextResponse.json({ ok: true });
+  }
   try {
     const body = await req.json();
     const entry = body?.entry?.[0];
