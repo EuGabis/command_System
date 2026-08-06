@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getConversationById } from "@/lib/repo";
 import { enviarMidiaManual } from "@/lib/engine";
 import { uploadBuffer, mediaTypeFromMime } from "@/lib/storage";
+import { rateLimit, clientIp } from "@/lib/ratelimit";
 import type { Platform } from "@/lib/types";
 
 const MAX_BYTES = 16 * 1024 * 1024; // 16 MB (limite do WhatsApp)
@@ -11,6 +12,10 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
+  // limite: 15 uploads/min por IP
+  if (!rateLimit(`media:${clientIp(req)}`, 15, 60_000).ok) {
+    return NextResponse.json({ error: "Muitos envios de arquivo. Aguarde." }, { status: 429 });
+  }
   const { id } = await params;
   const form = await req.formData().catch(() => null);
   const file = form?.get("file");
